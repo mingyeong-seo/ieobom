@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import GuardianHomePage from './pages/guardian/GuardianHomePage';
+import ParentHomePage from './pages/parent/ParentHomePage';
 import RoleSelectPage from './pages/role/RoleSelectPage';
 import SplashPage from './pages/splash/SplashPage';
 
@@ -11,7 +13,20 @@ function App() {
   }
 
   if (page === 'role') {
-    return <RoleSelectPage />;
+    return (
+      <RoleSelectPage
+        onSelectParent={() => setPage('parentHome')}
+        onSelectGuardian={() => setPage('guardianHome')}
+      />
+    );
+  }
+
+  if (page === 'parentHome') {
+    return <ParentHomePage />;
+  }
+
+  if (page === 'guardianHome') {
+    return <GuardianHomePage />;
   }
 
   return null;
