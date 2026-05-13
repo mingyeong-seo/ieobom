@@ -1,122 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import './App.css';
+
+import batteryIcon from './assets/battery.png';
+import networkIcon from './assets/network.png';
+import symbol from './assets/symbol.png';
+import wifiIcon from './assets/wifi.png';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const currentTime = '2:53';
+  const currentDate = '5월 14일 (목)';
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <main className="app">
+      <div className="phone-stage">
+        <section className="phone-frame">
+          <div className="phone-notch" />
 
-      <div className="ticks"></div>
+          <div className="phone-screen">
+            <header className="status-bar">
+              <span className="carrier">SKT</span>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+              <div className="status-icons" aria-label="상태 아이콘">
+                <img
+                  src={networkIcon}
+                  alt="네트워크"
+                  className="network-icon"
+                />
+                <img src={wifiIcon} alt="와이파이" className="wifi-icon" />
+                <img src={batteryIcon} alt="배터리" className="battery-icon" />
+              </div>
+            </header>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+            <section className="lock-screen">
+              <p className="lock-date">{currentDate}</p>
+              <h1 className="lock-time">{currentTime}</h1>
+
+              <button type="button" className="notification-card">
+                <div className="notification-icon">
+                  <img src={symbol} alt="이어봄 아이콘" />
+                </div>
+
+                <div className="notification-content">
+                  <strong>이어봄</strong>
+                  <p>약 드실 시간이에요 💊</p>
+                </div>
+              </button>
+
+              <div className="notification-guide">
+                <p>화면의 알림을 누르면 시작돼요!</p>
+                <span aria-hidden="true">⌄</span>
+              </div>
+
+              <div className="home-indicator" />
+            </section>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
 }
 
-export default App
+export default App;
