@@ -1,9 +1,10 @@
 import './App.css';
 
-import batteryIcon from './assets/battery.png';
-import networkIcon from './assets/network.png';
-import symbol from './assets/symbol.png';
-import wifiIcon from './assets/wifi.png';
+import batteryIcon from './assets/icons/battery.png';
+import networkIcon from './assets/icons/network.png';
+import wifiIcon from './assets/icons/wifi.png';
+
+import symbol from './assets/logos/symbol.png';
 
 function App() {
   const currentTime = '2:53';
@@ -25,13 +26,16 @@ function App() {
                   alt="네트워크"
                   className="network-icon"
                 />
+
                 <img src={wifiIcon} alt="와이파이" className="wifi-icon" />
+
                 <img src={batteryIcon} alt="배터리" className="battery-icon" />
               </div>
             </header>
 
             <section className="lock-screen">
               <p className="lock-date">{currentDate}</p>
+
               <h1 className="lock-time">{currentTime}</h1>
 
               <button type="button" className="notification-card">
