@@ -11,17 +11,9 @@ function App() {
   const [page, setPage] = useState("splash");
 
   const handleParentTabChange = (tab) => {
-    if (tab === "home") {
-      setPage("parentHome");
-    }
-
-    if (tab === "chat") {
-      setPage("parentChat");
-    }
-
-    if (tab === "story") {
-      setPage("parentStory");
-    }
+    if (tab === "home") setPage("parentHome");
+    if (tab === "chat") setPage("parentChat");
+    if (tab === "story") setPage("parentStory");
   };
 
   if (page === "splash") {
@@ -57,7 +49,12 @@ function App() {
   }
 
   if (page === "parentStory") {
-    return <ParentStoryPage onTabChange={handleParentTabChange} />;
+    return (
+      <ParentStoryPage
+        isCompleted={true}
+        onTabChange={handleParentTabChange}
+      />
+    );
   }
 
   if (page === "guardianHome") {
