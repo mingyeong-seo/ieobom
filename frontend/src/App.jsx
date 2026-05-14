@@ -4,6 +4,7 @@ import GuardianHomePage from './pages/guardian/GuardianHomePage';
 import ParentHomePage from './pages/parent/ParentHomePage';
 import RoleSelectPage from './pages/role/RoleSelectPage';
 import SplashPage from './pages/splash/SplashPage';
+import ParentStoryPage from './pages/parent/ParentStoryPage';
 
 function App() {
   const [page, setPage] = useState('splash');
@@ -26,7 +27,20 @@ function App() {
   }
 
   if (page === 'guardianHome') {
-    return <GuardianHomePage />;
+    return (
+      <GuardianHomePage
+        onGoStory={() => setPage('story')}
+      />
+    );
+  }
+
+  if (page === 'story') {
+    return (
+      <ParentStoryPage
+        isCompleted={false}
+        onGoHome={() => setPage('guardianHome')}
+      />
+    );
   }
 
   return null;

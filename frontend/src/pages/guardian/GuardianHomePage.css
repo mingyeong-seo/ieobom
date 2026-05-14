@@ -1,0 +1,108 @@
+.guardian-home {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fffaf4;
+    padding: 18px 18px 84px;
+}
+
+/* 헤더 */
+.parent-home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.parent-home-header h1 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.profile-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f6e4d4;
+}
+
+/* 인사 영역 */
+.greeting {
+    margin: 0 -18px 18px;
+    padding: 20px 18px;
+    background: #fee7de;
+}
+
+.greeting h2 {
+    margin: 0;
+}
+
+.greeting h3 {
+    margin: 8px 0;
+}
+
+.greeting p {
+    color: #777;
+    font-size: 14px;
+    margin: 15px 0 0;
+}
+
+/* 섹션 */
+.section {
+    padding: 16px;
+    padding-bottom: 80px;
+    flex: 1;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.edit {
+    color: #999;
+    font-size: 14px;
+}
+
+/* 카드 리스트 */
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.time {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 체크 버튼 */
+.check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #ff7a3d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.check.done {
+    background: #ff7a3d;
+    color: white;
+}
