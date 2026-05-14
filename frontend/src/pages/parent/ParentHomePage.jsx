@@ -1,14 +1,14 @@
-import './ParentHomePage.css';
+import "./ParentHomePage.css";
 
-import BottomTab from '../../components/common/BottomTab/BottomTab';
-import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
-import { chatMessages } from '../../mocks/chats';
-import { parentHome } from '../../mocks/home';
-import { reactionComments } from '../../mocks/reactions';
-import { routineSummary, routines } from '../../mocks/routines';
-import { pendingStory } from '../../mocks/stories';
+import BottomTab from "../../components/common/BottomTab/BottomTab";
+import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
+import { chatMessages } from "../../mocks/chats";
+import { parentHome } from "../../mocks/home";
+import { reactionComments } from "../../mocks/reactions";
+import { routineSummary, routines } from "../../mocks/routines";
+import { pendingStory } from "../../mocks/stories";
 
-function ParentHomePage() {
+function ParentHomePage({ onStartChat, onTabChange }) {
   const firstQuestion = chatMessages[0];
   const recentReaction = reactionComments[0];
 
@@ -31,7 +31,11 @@ function ParentHomePage() {
           <div className="question-card">{firstQuestion.text}</div>
         </section>
 
-        <button type="button" className="chat-start-button">
+        <button
+          type="button"
+          className="chat-start-button"
+          onClick={onStartChat}
+        >
           대화 시작하기
         </button>
 
@@ -54,7 +58,7 @@ function ParentHomePage() {
                 </div>
 
                 <span className={`routine-status ${routine.status}`}>
-                  {routine.status === 'completed' ? '완료' : '대기'}
+                  {routine.status === "completed" ? "완료" : "대기"}
                 </span>
               </div>
             ))}
@@ -72,7 +76,7 @@ function ParentHomePage() {
           </p>
         </section>
 
-        <BottomTab currentTab="home" onTabChange={() => {}} />
+        <BottomTab currentTab="home" onTabChange={onTabChange} />
       </section>
     </PhoneLayout>
   );
