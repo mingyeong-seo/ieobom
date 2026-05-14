@@ -134,6 +134,11 @@
   transform: translateY(-1px);
 }
 
+.chat-routine-chip.done.active {
+  box-shadow: none;
+  transform: none;
+}
+
 .chat-progress {
   height: 32px;
   padding: 0 20px;

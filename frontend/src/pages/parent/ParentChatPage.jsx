@@ -14,6 +14,20 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
   const parentMessage = chatMessages[1];
   const aiSecondMessage = chatMessages[2];
 
+  const displayRoutines =
+    chatStep === "completed"
+      ? todayRoutines.map((routine) =>
+          routine.title === "저녁 약"
+            ? {
+                ...routine,
+                status: "completed",
+                statusText: "완료",
+                statusClass: "done",
+              }
+            : routine,
+        )
+      : todayRoutines;
+
   const handleCompleteRoutine = () => {
     setChatStep("thinking");
 
@@ -28,7 +42,7 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
 
   return (
     <PhoneLayout leftStatus="9:41">
-      <section className="parent-chat-page">
+      <section className="parent-chat-page page-enter">
         <header className="chat-header">
           <button type="button" className="chat-back-button" onClick={onBack}>
             &lt;
@@ -41,7 +55,7 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
           <p>오늘 루틴</p>
 
           <div className="chat-routine-list">
-            {todayRoutines.map((routine) => (
+            {displayRoutines.map((routine) => (
               <div
                 key={routine.id}
                 className={`chat-routine-chip ${routine.statusClass} ${routine.colorClass}`}
@@ -61,6 +75,7 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
         <section className="chat-body">
           <div className="message-row ai previous">
             <div className="message-avatar" />
+
             <div className="message-bubble previous-bubble">
               이전에 비빔밥 이야기를 나눴어요.
             </div>
@@ -68,6 +83,7 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
 
           <div className="message-row ai">
             <div className="message-avatar" />
+
             <div className="message-bubble ai-bubble large-bubble">
               {aiFirstMessage.text}
             </div>
@@ -81,6 +97,7 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
 
           <div className="message-row ai">
             <div className="message-avatar" />
+
             <div className="message-bubble ai-bubble large-bubble">
               {aiSecondMessage.text}
             </div>
@@ -89,6 +106,7 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
           {chatStep === "thinking" && (
             <div className="message-row ai">
               <div className="message-avatar" />
+
               <div className="message-bubble ai-bubble thinking-bubble">
                 오늘 하루를 정리하고 있어요...
               </div>
@@ -98,6 +116,7 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
           {chatStep === "completed" && (
             <div className="message-row ai">
               <div className="message-avatar" />
+
               <div className="message-bubble ai-bubble large-bubble">
                 {nextAiMessage.text}
               </div>

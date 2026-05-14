@@ -9,6 +9,8 @@ import SplashPage from "./pages/splash/SplashPage";
 
 function App() {
   const [page, setPage] = useState("splash");
+  const [isParentStoryReady, setIsParentStoryReady] = useState(false);
+  const [isRoutineCompleted, setIsRoutineCompleted] = useState(false);
 
   const handleParentTabChange = (tab) => {
     if (tab === "home") {
@@ -42,6 +44,7 @@ function App() {
       <ParentHomePage
         onStartChat={() => setPage("parentChat")}
         onTabChange={handleParentTabChange}
+        isRoutineCompleted={isRoutineCompleted}
       />
     );
   }
@@ -50,14 +53,23 @@ function App() {
     return (
       <ParentChatPage
         onBack={() => setPage("parentHome")}
-        onCompleteRoutine={() => setPage("parentStory")}
+        onCompleteRoutine={() => {
+          setIsRoutineCompleted(true);
+          setIsParentStoryReady(true);
+          setPage("parentStory");
+        }}
         onTabChange={handleParentTabChange}
       />
     );
   }
 
   if (page === "parentStory") {
-    return <ParentStoryPage onTabChange={handleParentTabChange} />;
+    return (
+      <ParentStoryPage
+        isStoryReady={isParentStoryReady}
+        onTabChange={handleParentTabChange}
+      />
+    );
   }
 
   if (page === "guardianHome") {

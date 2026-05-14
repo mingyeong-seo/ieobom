@@ -39,3 +39,10 @@ body {
     opacity: 1;
   }
 }
+
+/* 움직임 최소화 설정 사용자를 위한 처리 */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}

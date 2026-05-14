@@ -8,13 +8,32 @@ import { reactionComments } from "../../mocks/reactions";
 import { routineSummary, routines } from "../../mocks/routines";
 import { pendingStory } from "../../mocks/stories";
 
-function ParentHomePage({ onStartChat, onTabChange }) {
+function ParentHomePage({ onStartChat, onTabChange, isRoutineCompleted }) {
   const firstQuestion = chatMessages[0];
   const recentReaction = reactionComments[0];
 
+  const displaySummary = isRoutineCompleted
+    ? {
+        completed: routineSummary.total,
+        total: routineSummary.total,
+      }
+    : routineSummary;
+
+  const displayRoutines = isRoutineCompleted
+    ? routines.map((routine) =>
+        routine.title === "저녁 약"
+          ? {
+              ...routine,
+              status: "completed",
+              statusText: "완료",
+            }
+          : routine,
+      )
+    : routines;
+
   return (
     <PhoneLayout leftStatus="10:41">
-      <section className="parent-home">
+      <section className="parent-home page-enter">
         <header className="parent-home-header">
           <h1>이어봄</h1>
           <div className="profile-circle" aria-label="프로필" />
@@ -43,12 +62,12 @@ function ParentHomePage({ onStartChat, onTabChange }) {
           <div className="section-header">
             <h2>오늘 루틴</h2>
             <span>
-              {routineSummary.completed} / {routineSummary.total} 완료
+              {displaySummary.completed} / {displaySummary.total} 완료
             </span>
           </div>
 
           <div className="routine-list">
-            {routines.map((routine) => (
+            {displayRoutines.map((routine) => (
               <div key={routine.id} className="routine-item">
                 <div className={`routine-icon ${routine.status}`} />
 
@@ -65,9 +84,11 @@ function ParentHomePage({ onStartChat, onTabChange }) {
           </div>
         </section>
 
-        <section className="story-ready-card">
-          <p>{pendingStory.message}</p>
-        </section>
+        {!isRoutineCompleted && (
+          <section className="story-ready-card">
+            <p>{pendingStory.message}</p>
+          </section>
+        )}
 
         <section className="family-reaction">
           <p className="section-label">최근 자녀 반응</p>
