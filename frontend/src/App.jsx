@@ -8,25 +8,58 @@ import RoleSelectPage from "./pages/role/RoleSelectPage";
 import SplashPage from "./pages/splash/SplashPage";
 
 function App() {
-  const [page, setPage] = useState("splash");
+  const [page, setPage] = useState("role");
+  const [selectedRole, setSelectedRole] = useState(null);
+
   const [isParentStoryReady, setIsParentStoryReady] = useState(false);
   const [isRoutineCompleted, setIsRoutineCompleted] = useState(false);
 
   const handleParentTabChange = (tab) => {
-    if (tab === "home") setPage("parentHome");
-    if (tab === "chat") setPage("parentChat");
-    if (tab === "story") setPage("parentStory");
-  };
+    if (tab === "home") {
+      setPage("parentHome");
+    }
 
-  if (page === "splash") {
-    return <SplashPage onNext={() => setPage("role")} />;
-  }
+    if (tab === "chat") {
+      setPage("parentChat");
+    }
+
+    if (tab === "story") {
+      setPage("parentStory");
+    }
+  };
 
   if (page === "role") {
     return (
       <RoleSelectPage
-        onSelectParent={() => setPage("parentHome")}
-        onSelectGuardian={() => setPage("guardianHome")}
+        onSelectParent={() => {
+          setSelectedRole("parent");
+          setPage("splash");
+        }}
+        onSelectGuardian={() => {
+          setSelectedRole("guardian");
+          setPage("splash");
+        }}
+      />
+    );
+  }
+
+  if (page === "splash") {
+    return (
+      <SplashPage
+        role={selectedRole}
+        onNext={() => {
+          if (selectedRole === "parent") {
+            setPage("parentHome");
+          }
+
+          if (selectedRole === "guardian") {
+            setPage("guardianHome");
+          }
+        }}
+        onBackToRole={() => {
+          setSelectedRole(null);
+          setPage("role");
+        }}
       />
     );
   }
