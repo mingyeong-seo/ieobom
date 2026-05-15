@@ -1,0 +1,197 @@
+.parent-story {
+    height: 100%;
+    padding: 18px 18px 84px;
+    background: #fffaf4;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 헤더 */
+.parent-home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.parent-home-header h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.date {
+    font-size: 13px;
+    color: var(--color-sub-text);
+}
+
+/* 날짜 네비 */
+.date-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--color-sub-text);
+}
+
+.date-nav .today {
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+/* 카드 공통 */
+.story-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 4px 16px rgba(120, 80, 54, 0.08);
+    margin-bottom: 16px;
+}
+
+/* 비어있는 상태 */
+.story-card.empty .label,
+.story-card.empty h2 {
+    text-align: left;
+}
+
+/* 제목 */
+.story-card h2 {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 0 10px;
+    color: var(--color-text);
+    line-height: 1.4;
+}
+
+.story-card .label {
+    font-size: 12px;
+    color: var(--color-primary);
+    font-weight: 700;
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.story-card .label::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-primary);
+}
+
+
+/* 내용 */
+.story-card .desc {
+    font-size: 13px;
+    color: var(--color-sub-text);
+    line-height: 1.6;
+}
+
+/* 비활성 버튼 */
+.disabled-btn {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f3f3f3;
+    color: #aaa;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* 활성 버튼 */
+.primary-btn {
+    margin-top: 16px;
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    background: var(--color-primary);
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* 반응 버튼들 */
+.reaction-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge.orange {
+    background: #ffe5d6;
+    color: #ff7a3d;
+}
+
+.badge.yellow {
+    background: #fff3cd;
+    color: #c9a200;
+}
+
+.badge.green {
+    background: #e4f7e7;
+    color: #2f9e44;
+}
+
+/* 가족 반응 */
+.family-section {
+    margin-top: 10px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--color-text);
+}
+
+.reaction-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.reaction-item:last-child {
+    border-bottom: none;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ffe5d6;
+}
+
+.avatar.green {
+    background: #e4f7e7;
+}
+
+.reaction-item strong {
+    font-size: 13px;
+}
+
+.reaction-item p {
+    margin: 2px 0;
+    font-size: 12px;
+    color: var(--color-text);
+}
+
+.reaction-item span {
+    font-size: 10px;
+    color: var(--color-sub-text);
+}

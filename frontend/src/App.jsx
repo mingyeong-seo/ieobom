@@ -13,17 +13,9 @@ function App() {
   const [isRoutineCompleted, setIsRoutineCompleted] = useState(false);
 
   const handleParentTabChange = (tab) => {
-    if (tab === "home") {
-      setPage("parentHome");
-    }
-
-    if (tab === "chat") {
-      setPage("parentChat");
-    }
-
-    if (tab === "story") {
-      setPage("parentStory");
-    }
+    if (tab === "home") setPage("parentHome");
+    if (tab === "chat") setPage("parentChat");
+    if (tab === "story") setPage("parentStory");
   };
 
   if (page === "splash") {
