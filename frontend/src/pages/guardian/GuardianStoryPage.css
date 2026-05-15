@@ -1,18 +1,19 @@
-.parent-story {
+.guardian-story {
   height: 100%;
   padding: 18px 18px 0;
   background: #fffaf4;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* 스크롤 영역 */
-.parent-story .scroll-area {
+.guardian-story .scroll-area {
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   padding-right: 6px;
-  margin-bottom: 84px;
+  margin-bottom: 150px;
   margin-right: -14px;
 }
 
@@ -68,62 +69,6 @@
   margin-bottom: 20px;
 }
 
-/* 비어있는 상태 */
-.story-card.empty .label,
-.story-card.empty h2 {
-  text-align: left;
-}
-
-/* 빈 상태 (가족 반응) */
-.empty-family {
-  margin-top: 8px;
-  padding: 28px 18px;
-  background: #fee7ded8;
-  border-radius: 16px;
-  text-align: center;
-}
-
-/* 아이콘 */
-.empty-icon img {
-  width: 50px;
-  opacity: 0.7;
-  display: block;
-  margin: 0 auto;
-}
-
-/* 제목 */
-.empty-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: #3b2b22;
-}
-
-/* 설명 */
-.empty-desc {
-  font-size: 16px;
-  line-height: 1.5;
-  color: #9a7b6f;
-}
-
-.empty-action-btn {
-  display: block;
-  margin: 16px auto;
-  padding: 14px 20px;
-  border-radius: 12px;
-  background: var(--color-primary);
-  color: white;
-  font-size: 18px;
-  font-weight: 700;
-  width: 100%;
-  border: none;
-  cursor: pointer;
-}
-
-.empty-action-btn:active {
-  transform: scale(0.97);
-}
-
 /* 제목 */
 .story-card h2 {
   font-size: 18px;
@@ -158,31 +103,6 @@
   line-height: 1.6;
 }
 
-/* 비활성 버튼 */
-.disabled-btn {
-  margin-top: 16px;
-  padding: 12px;
-  border-radius: 10px;
-  background: #f3f3f3;
-  color: #aaa;
-  font-size: 16px;
-  text-align: center;
-}
-
-/* 활성 버튼 */
-.primary-btn {
-  margin-top: 5px;
-  width: 100%;
-  height: 44px;
-  border: none;
-  border-radius: 12px;
-  background: var(--color-primary);
-  color: white;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  text-align: center;
-}
 
 /* 반응 버튼들 */
 .reaction-row {
@@ -250,9 +170,9 @@
   background: #ffe5d6;
 }
 
-.avatar.green {
+/* .avatar.green {
   background: #e4f7e7;
-}
+} */
 
 .badge.love {
   background: #ffe5d6;
@@ -289,4 +209,49 @@
   margin-top: 16px;
   padding-top: 6px;
   border-top: 1px solid var(--color-border);
+}
+
+.reaction-input {
+    position: absolute;   /* ✅ fixed → absolute */
+    bottom: 84px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    padding: 10px 16px;
+    background: #fffaf4;
+}
+
+.reaction-input input {
+    flex: 1;
+    padding: 14px;
+    border-radius: 20px;
+    border: none;
+    background: #e6e1dca6;
+    font-size: 14px;
+}
+
+.reaction-input button {
+    padding: 0 16px;
+    border-radius: 14px;
+    border: none;
+    background: #d48452;
+    color: white;
+    font-weight: 700;
+}
+
+.empty-guardian {
+    margin-top: 80px;
+    text-align: center;
+    color: #9a7b6f;
+}
+
+.empty-guardian h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.empty-guardian p {
+    font-size: 14px;
+    margin: 4px 0;
 }

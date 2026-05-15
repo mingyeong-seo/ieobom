@@ -1,5 +1,9 @@
 import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
 import BottomTab from "../../components/common/BottomTab/BottomTab";
+import storyIcon from "../../assets/icons/story.png";
+import photo1 from "../../assets/img/story1.png";
+import photo2 from "../../assets/img/story2.png";
+import photo3 from "../../assets/img/story3.png";
 import "./ParentStoryPage.css";
 
 import {
@@ -8,7 +12,6 @@ import {
   pendingStory,
   todayStory,
 } from "../../mocks/stories";
-
 
 function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
   const handleTabChange = (tab) => {
@@ -26,13 +29,13 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
     <PhoneLayout>
       <div className="parent-story">
         <header className="parent-home-header">
-          <h1>기록</h1>
-          <span className="date">5월 12일</span>
+          <h1>이어봄</h1>
+          <div className="profile-circle" aria-label="프로필" />
         </header>
 
         <div className="date-nav">
           <span>{"< 어제"}</span>
-          <span className="today">오늘</span>
+          <span className="today">오늘 기록</span>
           <span>{"내일 >"}</span>
         </div>
 
@@ -50,8 +53,11 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
                   대화를 마치면 AI가 하루를 요약해 드려요
                 </div>
               </div>
+              <p className="section-title">가족 반응</p>
               <div className="empty-family">
-                <div className="empty-icon" />
+                <div className="empty-icon">
+                  <img src={storyIcon} alt="이야기" />
+                </div>
 
                 <p className="empty-title">아직 가족의 이야기가 없어요.</p>
 
@@ -60,6 +66,13 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
                   가족들의 반응도 함께 기록돼요.
                 </p>
               </div>
+
+              <button
+                className="empty-action-btn"
+                onClick={() => handleTabChange("chat")}
+              >
+                대화 시작하기
+              </button>
             </>
           ) : (
             <>
@@ -76,9 +89,9 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
               </div>
               <p className="section-title">오늘의 사진</p>
               <div className="photo-grid">
-                <div className="photo-item" />
-                <div className="photo-item" />
-                <div className="photo-item" />
+                <img src={photo1} className="photo-item" />
+                <img src={photo2} className="photo-item" />
+                <img src={photo3} className="photo-item" />
                 <div className="photo-item" />
               </div>
 
