@@ -3,7 +3,7 @@ import BottomTab from "../../components/common/BottomTab/BottomTab";
 import Card from "../../components/common/Card/Card";
 import "./GuardianHomePage.css";
 
-function GuardianHomePage({ onGoStory }) {
+function GuardianHomePage({ onTabChange }) {
   const todayList = [
     { title: "아침 인사", time: "08:12", done: true },
     { title: "공원 사진 1장", time: "14:22", done: true },
@@ -49,14 +49,7 @@ function GuardianHomePage({ onGoStory }) {
           </div>
         </div>
 
-        <BottomTab
-          currentTab="home"
-          onTabChange={(tab) => {
-            if (tab === "story") {
-              onGoStory();
-            }
-          }}
-        />
+        <BottomTab currentTab="home" onTabChange={onTabChange} />
       </div>
     </PhoneLayout>
   );

@@ -7,6 +7,7 @@ import ParentStoryPage from "./pages/parent/ParentStoryPage";
 import RoleSelectPage from "./pages/role/RoleSelectPage";
 import SplashPage from "./pages/splash/SplashPage";
 import StoryGeneratingPage from "./pages/story/StoryGeneratingPage";
+import GuardianStoryPage from "./pages/guardian/GuardianStoryPage";
 
 function App() {
   const [page, setPage] = useState("role");
@@ -27,6 +28,11 @@ function App() {
     if (tab === "story") {
       setPage("parentStory");
     }
+  };
+
+  const handleGuardianTabChange = (tab) => {
+    if (tab === "home") setPage("guardianHome");
+    if (tab === "story") setPage("guardianStory"); // ✅ 추가
   };
 
   if (page === "role") {
@@ -99,13 +105,22 @@ function App() {
   }
 
   if (page === "guardianHome") {
-    return <GuardianHomePage />;
+    return <GuardianHomePage onTabChange={handleGuardianTabChange} />;
   }
 
   if (page === "storyGenerating") {
     return (
       <StoryGeneratingPage
         onDone={() => setPage("parentStory")} // ✅ 여기서 기록으로 이동
+      />
+    );
+  }
+
+  if (page === "guardianStory") {
+    return (
+      <GuardianStoryPage
+        isStoryReady={true}
+        onTabChange={handleGuardianTabChange}
       />
     );
   }
