@@ -13,24 +13,21 @@ function GuardianHomePage({ onGoStory }) {
 
   return (
     <PhoneLayout>
-      <div className="guardian-home">
-        {/* 상단 헤더 */}
+      <div className="guardian-home page-enter">
         <header className="parent-home-header">
           <h1>이어봄</h1>
           <div className="profile-circle" />
         </header>
 
-        {/* 인사 영역 */}
         <div className="greeting">
-          <h2>안녕하세요!</h2>
-          <h3>오늘 하루는 어떠셨어요?</h3>
+          <h2>부모님의 하루가 도착했어요</h2>
+          <h3>오늘의 안부를 확인해보세요</h3>
           <p>2025년 5월 12일 월요일</p>
         </div>
 
-        {/* 리스트 */}
         <div className="section">
           <div className="section-header">
-            <span>오늘의 안부</span>
+            <span>오늘의 안부 기록</span>
             <span className="edit">수정하기</span>
           </div>
 
@@ -51,6 +48,7 @@ function GuardianHomePage({ onGoStory }) {
             ))}
           </div>
         </div>
+
         <BottomTab
           currentTab="home"
           onTabChange={(tab) => {
@@ -60,7 +58,6 @@ function GuardianHomePage({ onGoStory }) {
           }}
         />
       </div>
-
     </PhoneLayout>
   );
 }

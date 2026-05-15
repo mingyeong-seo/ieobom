@@ -12,6 +12,14 @@ function ParentHomePage({ onStartChat, onTabChange, isRoutineCompleted }) {
   const firstQuestion = chatMessages[0];
   const recentReaction = reactionComments[0];
 
+  const heroTitle = isRoutineCompleted
+    ? "오늘 하루 기록이 완성됐어요"
+    : "오늘 하루가 잘 기록되고 있어요";
+
+  const heroDescription = isRoutineCompleted
+    ? "가족에게 오늘의 이야기가 전달될 준비를 마쳤어요."
+    : "저녁 약만 확인하면 오늘 이야기가 완성돼요.";
+
   const displaySummary = isRoutineCompleted
     ? {
         completed: routineSummary.total,
@@ -40,9 +48,9 @@ function ParentHomePage({ onStartChat, onTabChange, isRoutineCompleted }) {
         </header>
 
         <section className="home-hero">
-          <p className="home-greeting">{parentHome.greeting}</p>
+          <p className="home-greeting">{heroTitle}</p>
           <p className="home-date">{parentHome.date}</p>
-          <p className="home-weather">{parentHome.weather}</p>
+          <p className="home-weather">{heroDescription}</p>
         </section>
 
         <section className="first-question">
