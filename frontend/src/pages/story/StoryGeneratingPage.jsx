@@ -1,7 +1,16 @@
+import { useEffect } from "react";
 import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
 import "./StoryGeneratingPage.css";
 
-function StoryGeneratingPage() {
+function StoryGeneratingPage({ onDone }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onDone(); // ✅ 일정 시간 후 이동
+    }, 3500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <PhoneLayout>
       <div className="story-generating">
@@ -13,8 +22,6 @@ function StoryGeneratingPage() {
 
             <div className="inner-circle" />
           </div>
-
-
           <h2>오늘 하루를</h2>
           <h2>정리하고 있어요</h2>
 

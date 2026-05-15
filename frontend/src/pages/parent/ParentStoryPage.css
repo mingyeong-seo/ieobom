@@ -1,9 +1,29 @@
 .parent-story {
     height: 100%;
-    padding: 18px 18px 84px;
+    padding: 18px 18px 0;
     background: #fffaf4;
     display: flex;
     flex-direction: column;
+}
+
+/* ✅ 스크롤 영역 */
+.scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 6px;
+    margin-bottom: 84px;
+
+    margin-right: -14px;
+}
+
+.scroll-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+    background: #d8cfc7;
+    border-radius: 10px;
 }
 
 /* 헤더 */
@@ -45,15 +65,44 @@
 .story-card {
     background: #ffffff;
     border-radius: 14px;
-    padding: 18px;
+    padding: 5px 18px 20px;
     box-shadow: 0 4px 16px rgba(120, 80, 54, 0.08);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 /* 비어있는 상태 */
 .story-card.empty .label,
 .story-card.empty h2 {
     text-align: left;
+}
+
+/* 빈 상태 (가족 반응) */
+.empty-family {
+    margin-top: 32px;
+    text-align: center;
+    color: var(--color-sub-text);
+}
+
+/* 아이콘 (임시) */
+.empty-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    background: #ddd;
+    border-radius: 50%;
+}
+
+/* 제목 */
+.empty-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* 설명 */
+.empty-desc {
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 /* 제목 */
@@ -105,7 +154,7 @@
 
 /* 활성 버튼 */
 .primary-btn {
-    margin-top: 16px;
+    margin-top: 5px;
     width: 100%;
     height: 44px;
     border: none;
@@ -159,15 +208,42 @@
     color: var(--color-text);
 }
 
-.reaction-item {
+/* 댓글 */
+.comment-item {
     display: flex;
     gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 12px;
 }
 
-.reaction-item:last-child {
-    border-bottom: none;
+/* 말풍선 */
+.comment-bubble {
+    background: #FEE7DE;
+    border-radius: 12px;
+    padding: 10px 12px;
+    max-width: 75%;
+}
+
+/* 이름 */
+.comment-bubble strong {
+    font-size: 12px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* 내용 */
+.comment-bubble p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-text);
+    line-height: 1.4;
+}
+
+/* 시간 */
+.comment-bubble span {
+    display: block;
+    margin-top: 6px;
+    font-size: 10px;
+    color: var(--color-sub-text);
 }
 
 .avatar {
@@ -194,4 +270,41 @@
 .reaction-item span {
     font-size: 10px;
     color: var(--color-sub-text);
+}
+
+.badge.love {
+    background: #ffe5d6;
+    color: #ff7a3d;
+}
+
+.badge.miss {
+    background: #fff3cd;
+    color: #c9a200;
+}
+
+.badge.call {
+    background: #e4f7e7;
+    color: #2f9e44;
+}
+
+/* 2x2 그리드 */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    margin-bottom: 20px;
+}
+
+/* 사진 */
+.photo-item {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #ffffff;
+    /* ✅ 임시 (나중에 이미지) */
+}
+
+.family-section {
+    margin-top: 16px;
+    padding-top: 6px;
+    border-top: 1px solid var(--color-border);
 }

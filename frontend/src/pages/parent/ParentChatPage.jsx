@@ -17,15 +17,15 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
   const displayRoutines =
     chatStep === "completed"
       ? todayRoutines.map((routine) =>
-          routine.title === "저녁 약"
-            ? {
-                ...routine,
-                status: "completed",
-                statusText: "완료",
-                statusClass: "done",
-              }
-            : routine,
-        )
+        routine.title === "저녁 약"
+          ? {
+            ...routine,
+            status: "completed",
+            statusText: "완료",
+            statusClass: "done",
+          }
+          : routine,
+      )
       : todayRoutines;
 
   const handleCompleteRoutine = () => {
@@ -33,11 +33,11 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
 
     setTimeout(() => {
       setChatStep("completed");
-    }, 1500);
 
-    setTimeout(() => {
-      onCompleteRoutine();
-    }, 3500);
+      setTimeout(() => {
+        onCompleteRoutine(); // ✅ 메시지 보여주고 바로 이동
+      }, 1000); // ✅ 메시지 읽을 최소 시간
+    }, 2000);
   };
 
   return (
