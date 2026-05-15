@@ -3,7 +3,7 @@
   height: 100%;
   padding: 18px 18px 84px;
   background: #fffaf4;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .parent-home-header {
