@@ -1,15 +1,16 @@
-import AppHeader from '../../components/common/AppHeader/AppHeader';
-import BottomTab from '../../components/common/BottomTab/BottomTab';
-import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
+import AppHeader from "../../components/common/AppHeader/AppHeader";
+import BottomTab from "../../components/common/BottomTab/BottomTab";
+import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
 
-import daughterProfile from '../../assets/images/daughter-profile.png';
-import photo1 from '../../assets/img/story1.png';
-import photo2 from '../../assets/img/story2.png';
-import photo3 from '../../assets/img/story3.png';
-import { reactionComments, reactions, todayStory } from '../../mocks/stories';
-import { guardianTabs } from './guardianTabs';
+import daughterProfile from "../../assets/images/daughter-profile.png";
+import photo1 from "../../assets/img/story1.png";
+import photo2 from "../../assets/img/story2.png";
+import photo3 from "../../assets/img/story3.png";
 
-import './GuardianStoryPage.css';
+import { reactionComments, reactions, todayStory } from "../../mocks/stories";
+import { guardianTabs } from "./guardianTabs";
+
+import "./GuardianStoryPage.css";
 
 function GuardianStoryPage({
   isStoryReady = true,
@@ -18,19 +19,18 @@ function GuardianStoryPage({
   onTabChange,
 }) {
   return (
-    <PhoneLayout leftStatus="6:30">
+    <PhoneLayout>
       <section className="guardian-story">
         <AppHeader
-          className="guardian-story-header"
+          className="parent-home-header"
           profileImage={daughterProfile}
-          profileAlt="보호자 프로필"
           onLogoClick={onBackToRole}
         />
 
         <div className="date-nav">
-          <span>{'< 어제'}</span>
+          <span>{"< 어제"}</span>
           <span className="today">오늘 기록</span>
-          <span>{'내일 >'}</span>
+          <span>{"내일 >"}</span>
         </div>
 
         <div className="scroll-area">
@@ -52,7 +52,7 @@ function GuardianStoryPage({
                 <button
                   type="button"
                   className="primary-btn"
-                  onClick={() => onComingSoon?.('storyFull')}
+                  onClick={() => onComingSoon?.("storyFull")}
                 >
                   오늘 하루 이야기 전체 화면으로 이동 →
                 </button>
@@ -60,26 +60,16 @@ function GuardianStoryPage({
 
               <p className="section-title">오늘의 사진</p>
               <div className="photo-grid">
-                <img src={photo1} className="photo-item" alt="오늘의 사진 1" />
-                <img src={photo2} className="photo-item" alt="오늘의 사진 2" />
-                <img src={photo3} className="photo-item" alt="오늘의 사진 3" />
-                <button
-                  type="button"
-                  className="photo-item photo-placeholder"
-                  onClick={() => onComingSoon?.('imageSave')}
-                  aria-label="사진 더보기"
-                />
+                <img src={photo1} className="photo-item" />
+                <img src={photo2} className="photo-item" />
+                <img src={photo3} className="photo-item" />
+                <button className="photo-item photo-placeholder" />
               </div>
 
               <div className="reaction-row">
                 {reactions.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className={`badge ${item.type}`}
-                    onClick={() => onComingSoon?.('reactionStats')}
-                  >
-                    {item.label} ({item.count})
+                  <button key={item.id} className={`badge ${item.type}`}>
+                    {item.label} <br />({item.count})
                   </button>
                 ))}
               </div>
@@ -90,7 +80,6 @@ function GuardianStoryPage({
                 {reactionComments.map((item) => (
                   <div key={item.id} className="comment-item">
                     <div className="avatar" />
-
                     <div className="comment-bubble">
                       <strong>{item.writer}</strong>
                       <p>{item.message}</p>
@@ -103,9 +92,10 @@ function GuardianStoryPage({
           )}
         </div>
 
+        {/* ✅ 보호자 전용 */}
         {isStoryReady && (
           <div className="reaction-input">
-            <button type="button" onClick={() => onComingSoon?.('reactionAdd')}>
+            <button type="button" onClick={() => onComingSoon?.("reactionAdd")}>
               오늘 하루에 반응 남기기...
             </button>
           </div>
