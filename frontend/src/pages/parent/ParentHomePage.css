@@ -1,178 +1,98 @@
-.parent-home {
-  position: relative;
-  height: 100%;
-  padding: 18px 18px 84px;
-  background: #fffaf4;
-  overflow-y: auto;
+@import '../home/HomeShared.css';
+
+.reaction-section {
+  margin-bottom: 26px;
 }
 
-.parent-home-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
+.reaction-card {
+  border: 1px solid #efe3da;
+  border-radius: 20px;
+
+  background: #fffdf9;
+
+  overflow: hidden;
+
+  box-shadow: 0 6px 18px rgba(120, 80, 54, 0.05);
 }
 
-.parent-home-header h1 {
-  margin: 0;
-  color: var(--color-primary);
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.profile-circle {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #f6e4d4;
-}
-
-.home-hero {
-  margin: 0 -18px 18px;
-  padding: 20px 18px;
-  background: #fee7de;
-}
-
-.home-greeting {
-  margin: 0 0 8px;
-  color: var(--color-text);
-  font-size: 22px;
-  font-weight: 800;
-}
-
-.home-date,
-.home-weather {
-  margin: 0;
-  color: var(--color-sub-text);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.section-label {
-  margin: 0 0 8px;
-  color: var(--color-primary);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.question-card {
-  display: inline-block;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: var(--color-card);
-  color: var(--color-text);
-  font-size: 14px;
-  box-shadow: 0 4px 14px rgba(120, 80, 54, 0.06);
-}
-
-.chat-start-button {
+.reaction-row {
   width: 100%;
-  height: 48px;
-  margin: 18px 0 24px;
+  min-height: 74px;
+  padding: 10px 18px;
+
   border: 0;
-  border-radius: 12px;
-  background: var(--color-primary);
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  background: #fffdf9;
+
+  font: inherit;
+  text-align: left;
   cursor: pointer;
 }
 
-.routine-section {
-  margin-bottom: 16px;
+.reaction-row:hover,
+.reaction-row:focus-visible {
+  background: #fffaf4;
 }
 
-.section-header {
+.reaction-row + .reaction-row {
+  border-top: 1px solid #f0e5dc;
+}
+
+.reaction-avatar {
+  width: 54px;
+  height: 54px;
+
+  border-radius: 50%;
+
+  background: #f3ede8;
+
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  justify-content: center;
+
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.section-header h2 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 800;
+.reaction-avatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+  object-fit: cover;
 }
 
-.section-header span {
-  color: var(--color-sub-text);
-  font-size: 11px;
-}
+.reaction-content {
+  flex: 1;
+  min-width: 0;
 
-.routine-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  justify-content: center;
 }
 
-.routine-item {
-  min-height: 42px;
-  padding: 7px 8px;
-  border: 1px solid var(--color-border);
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--color-card);
-}
+.reaction-content p {
+  margin: 0 0 4px;
 
-.routine-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: var(--color-yellow);
-}
+  color: var(--color-text);
 
-.routine-icon.completed {
-  background: var(--color-green);
-}
-
-.routine-item strong {
-  display: block;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.7px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.routine-item p {
-  margin: 2px 0 0;
-  color: var(--color-sub-text);
-  font-size: 10px;
-}
+.reaction-content span {
+  color: #b7aaa0;
 
-.routine-status {
-  margin-left: auto;
-  color: var(--color-sub-text);
-  font-size: 10px;
-}
-
-.routine-status.completed {
-  color: var(--color-primary);
-  font-weight: 700;
-}
-
-.story-ready-card {
-  margin: 14px -18px 0;
-  padding: 16px 18px;
-  background: #fff6cf;
-}
-
-.story-ready-card p {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.family-reaction {
-  margin: 0 -18px;
-  padding: 18px;
-  background: var(--color-green);
-}
-
-.family-reaction p:last-child {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 16px;
+  font-weight: 500;
 }

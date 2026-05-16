@@ -1,34 +1,48 @@
-import "./BottomTab.css";
+import './BottomTab.css';
 
-function BottomTab({ currentTab = "home", onTabChange = () => {} }) {
+const defaultTabs = [
+  {
+    id: 'home',
+    icon: '🏠',
+    label: '홈',
+  },
+  {
+    id: 'chat',
+    icon: '💬',
+    label: '대화',
+  },
+  {
+    id: 'story',
+    icon: '▤',
+    label: '기록',
+  },
+];
+
+function BottomTab({
+  currentTab = 'home',
+  onTabChange = () => {},
+  tabs = defaultTabs,
+}) {
   return (
-    <nav className="bottom-tab">
-      <button
-        type="button"
-        className={`tab-item ${currentTab === "home" ? "active" : ""}`}
-        onClick={() => onTabChange("home")}
-      >
-        <span className="tab-icon">🏠</span>
-        <span className="tab-label">홈</span>
-      </button>
+    <nav className="bottom-tab" aria-label="하단 탭">
+      {tabs.map((tab) => {
+        const isActive = currentTab === tab.id;
 
-      <button
-        type="button"
-        className={`tab-item ${currentTab === "chat" ? "active" : ""}`}
-        onClick={() => onTabChange("chat")}
-      >
-        <span className="tab-icon">💬</span>
-        <span className="tab-label">대화</span>
-      </button>
-
-      <button
-        type="button"
-        className={`tab-item ${currentTab === "story" ? "active" : ""}`}
-        onClick={() => onTabChange("story")}
-      >
-        <span className="tab-icon">📖</span>
-        <span className="tab-label">기록</span>
-      </button>
+        return (
+          <button
+            key={tab.id}
+            type="button"
+            className={`tab-item ${isActive ? 'active' : ''}`}
+            aria-current={isActive ? 'page' : undefined}
+            onClick={() => onTabChange(tab.id)}
+          >
+            <span className="tab-icon" aria-hidden="true">
+              {tab.icon}
+            </span>
+            <span className="tab-label">{tab.label}</span>
+          </button>
+        );
+      })}
     </nav>
   );
 }

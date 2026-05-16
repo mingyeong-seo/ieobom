@@ -1,56 +1,96 @@
-import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
-import BottomTab from "../../components/common/BottomTab/BottomTab";
-import Card from "../../components/common/Card/Card";
-import "./GuardianHomePage.css";
+import './GuardianHomePage.css';
 
-function GuardianHomePage({ onTabChange }) {
-  const todayList = [
-    { title: "아침 인사", time: "08:12", done: true },
-    { title: "공원 사진 1장", time: "14:22", done: true },
-    { title: "혈압약 복용", time: "21:00", done: true },
-    { title: "저녁 안부", time: "21:30", done: false },
-  ];
+import AppHeader from '../../components/common/AppHeader/AppHeader';
+import BottomTab from '../../components/common/BottomTab/BottomTab';
+import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
 
+import PastTodaySection from '../home/PastTodaySection';
+import RoutineList from '../home/RoutineList';
+
+import daughterProfile from '../../assets/images/daughter-profile.png';
+import { completedRoutines } from '../../mocks/routines';
+import { todayStory } from '../../mocks/stories';
+import { guardianPastTodayItems } from '../home/homeSharedData';
+import { guardianTabs } from './guardianTabs';
+
+function GuardianHomePage({
+  onBackToRole,
+  onGoStory,
+  onComingSoon,
+  onTabChange,
+}) {
   return (
-    <PhoneLayout>
-      <div className="guardian-home page-enter">
-        <header className="parent-home-header">
-          <h1>이어봄</h1>
-          <div className="profile-circle" />
-        </header>
+    <PhoneLayout leftStatus="6:30">
+      <section className="guardian-home page-enter">
+        <AppHeader
+          className="guardian-home-header"
+          logoClassName="guardian-home-logo"
+          profileImage={daughterProfile}
+          profileAlt="보호자 프로필"
+          onLogoClick={onBackToRole}
+          onProfileClick={() => onComingSoon?.('profile')}
+        />
 
-        <div className="greeting">
-          <h2>부모님의 하루가 도착했어요</h2>
-          <h3>오늘의 안부를 확인해보세요</h3>
-          <p>2025년 5월 12일 월요일</p>
-        </div>
+        <main className="guardian-home-scroll">
+          <section className="guardian-hero">
+            <p className="guardian-greeting">부모님의 하루가 도착했어요</p>
+            <h2>오늘의 안부를 확인해보세요</h2>
+            <p className="guardian-date">2026년 5월 18일 월요일</p>
 
-        <div className="section">
-          <div className="section-header">
-            <span>오늘의 안부 기록</span>
-            <span className="edit">수정하기</span>
-          </div>
+            <button
+              type="button"
+              className="home-chat-start-button"
+              onClick={onGoStory}
+            >
+              기록 보러가기
+            </button>
+          </section>
 
-          <div className="card-list">
-            {todayList.map((item, idx) => (
-              <Card key={idx}>
-                <div className="card-content">
-                  <div>
-                    <div className="title">{item.title}</div>
-                    <div className="time">{item.time}</div>
-                  </div>
+          <RoutineList
+            title="어제의 기록"
+            routines={completedRoutines}
+            action={
+              <button
+                type="button"
+                className="more-button"
+                onClick={() => onComingSoon?.('analytics')}
+              >
+                더보기 &gt;
+              </button>
+            }
+          />
 
-                  <div className={`check ${item.done ? "done" : ""}`}>
-                    {item.done && "✓"}
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
+          <section className="ai-suggestion-section">
+            <div className="section-header">
+              <h2>
+                AI 제안 <span aria-hidden="true">💌</span>
+              </h2>
+            </div>
 
-        <BottomTab currentTab="home" onTabChange={onTabChange} />
-      </div>
+            <div className="ai-suggestion-card">
+              <strong>한번 안부를 전해보세요</strong>
+              <p>{todayStory.aiSuggestion}</p>
+
+              <button type="button" onClick={() => onComingSoon?.('call')}>
+                전화하기
+              </button>
+            </div>
+          </section>
+
+          <PastTodaySection
+            items={guardianPastTodayItems}
+            subtitle="부모님의 지난 기록을 다시 확인해보세요"
+            onMore={() => onComingSoon?.('album')}
+            onItemClick={() => onComingSoon?.('storyFull')}
+          />
+        </main>
+
+        <BottomTab
+          currentTab="home"
+          tabs={guardianTabs}
+          onTabChange={onTabChange}
+        />
+      </section>
     </PhoneLayout>
   );
 }

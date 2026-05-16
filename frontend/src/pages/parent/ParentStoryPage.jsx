@@ -1,42 +1,49 @@
-import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
-import BottomTab from "../../components/common/BottomTab/BottomTab";
-import storyIcon from "../../assets/icons/story.png";
-import photo1 from "../../assets/img/story1.png";
-import photo2 from "../../assets/img/story2.png";
-import photo3 from "../../assets/img/story3.png";
-import "./ParentStoryPage.css";
+import BottomTab from '../../components/common/BottomTab/BottomTab';
+import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
+
+import storyIcon from '../../assets/icons/story.png';
+import photo1 from '../../assets/img/story1.png';
+import photo2 from '../../assets/img/story2.png';
+import photo3 from '../../assets/img/story3.png';
 
 import {
-  reactions,
-  reactionComments,
   pendingStory,
+  reactionComments,
+  reactions,
   todayStory,
-} from "../../mocks/stories";
+} from '../../mocks/stories';
 
-function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
+import './ParentStoryPage.css';
+
+function ParentStoryPage({
+  isStoryReady = false,
+  onComingSoon,
+  onTabChange,
+  onGoHome,
+}) {
   const handleTabChange = (tab) => {
     if (onTabChange) {
       onTabChange(tab);
       return;
     }
 
-    if (tab === "home" && onGoHome) {
+    if (tab === 'home' && onGoHome) {
       onGoHome();
     }
   };
 
   return (
     <PhoneLayout>
-      <div className="parent-story">
-        <header className="parent-home-header">
-          <h1>이어봄</h1>
-          <div className="profile-circle" aria-label="프로필" />
+      <section className="parent-story">
+        <header className="parent-story-header">
+          <h1>기록</h1>
+          <span className="date">5월 17일</span>
         </header>
 
         <div className="date-nav">
-          <span>{"< 어제"}</span>
+          <span>{'< 어제'}</span>
           <span className="today">오늘 기록</span>
-          <span>{"내일 >"}</span>
+          <span>{'내일 >'}</span>
         </div>
 
         <div className="scroll-area">
@@ -53,6 +60,7 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
                   대화를 마치면 AI가 하루를 요약해 드려요
                 </div>
               </div>
+
               <p className="section-title">가족 반응</p>
               <div className="empty-family">
                 <div className="empty-icon">
@@ -68,8 +76,9 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
               </div>
 
               <button
+                type="button"
                 className="empty-action-btn"
-                onClick={() => handleTabChange("chat")}
+                onClick={() => handleTabChange('chat')}
               >
                 대화 시작하기
               </button>
@@ -83,23 +92,38 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
 
                 <p className="desc">{todayStory.summary}</p>
 
-                <button className="primary-btn">
+                <button
+                  type="button"
+                  className="primary-btn"
+                  onClick={() => onComingSoon?.('storyFull')}
+                >
                   오늘 하루 이야기 전체 화면으로 이동 →
                 </button>
               </div>
+
               <p className="section-title">오늘의 사진</p>
               <div className="photo-grid">
-                <img src={photo1} className="photo-item" />
-                <img src={photo2} className="photo-item" />
-                <img src={photo3} className="photo-item" />
-                <div className="photo-item" />
+                <img src={photo1} className="photo-item" alt="오늘의 사진 1" />
+                <img src={photo2} className="photo-item" alt="오늘의 사진 2" />
+                <img src={photo3} className="photo-item" alt="오늘의 사진 3" />
+                <button
+                  type="button"
+                  className="photo-item photo-placeholder"
+                  onClick={() => onComingSoon?.('imageSave')}
+                  aria-label="사진 더보기"
+                />
               </div>
 
               <div className="reaction-row">
                 {reactions.map((item) => (
-                  <span key={item.id} className={`badge ${item.type}`}>
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`badge ${item.type}`}
+                    onClick={() => onComingSoon?.('reactionStats')}
+                  >
                     {item.label} ({item.count})
-                  </span>
+                  </button>
                 ))}
               </div>
 
@@ -113,7 +137,7 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
                     <div className="comment-bubble">
                       <strong>{item.writer}</strong>
                       <p>{item.message}</p>
-                      <span>25/05/14 20:30</span>
+                      <span>{item.time}</span>
                     </div>
                   </div>
                 ))}
@@ -123,7 +147,7 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
         </div>
 
         <BottomTab currentTab="story" onTabChange={handleTabChange} />
-      </div>
+      </section>
     </PhoneLayout>
   );
 }

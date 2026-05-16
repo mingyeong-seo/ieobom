@@ -1,27 +1,36 @@
-import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
-import BottomTab from "../../components/common/BottomTab/BottomTab";
-import photo1 from "../../assets/img/story1.png";
-import photo2 from "../../assets/img/story2.png";
-import photo3 from "../../assets/img/story3.png";
+import AppHeader from '../../components/common/AppHeader/AppHeader';
+import BottomTab from '../../components/common/BottomTab/BottomTab';
+import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
 
-import "./GuardianStoryPage.css";
+import daughterProfile from '../../assets/images/daughter-profile.png';
+import photo1 from '../../assets/img/story1.png';
+import photo2 from '../../assets/img/story2.png';
+import photo3 from '../../assets/img/story3.png';
+import { reactionComments, reactions, todayStory } from '../../mocks/stories';
+import { guardianTabs } from './guardianTabs';
 
-import { reactions, reactionComments, todayStory } from "../../mocks/stories";
+import './GuardianStoryPage.css';
 
-function GuardianStoryPage({ isStoryReady = false, onTabChange }) {
+function GuardianStoryPage({
+  isStoryReady = true,
+  onBackToRole,
+  onComingSoon,
+  onTabChange,
+}) {
   return (
-    <PhoneLayout>
-      <div className="guardian-story">
-        {/* ✅ 헤더 */}
-        <header className="parent-home-header">
-          <h1>이어봄</h1>
-          <div className="profile-circle" />
-        </header>
+    <PhoneLayout leftStatus="6:30">
+      <section className="guardian-story">
+        <AppHeader
+          className="guardian-story-header"
+          profileImage={daughterProfile}
+          profileAlt="보호자 프로필"
+          onLogoClick={onBackToRole}
+        />
 
         <div className="date-nav">
-          <span>{"< 어제"}</span>
+          <span>{'< 어제'}</span>
           <span className="today">오늘 기록</span>
-          <span>{"내일 >"}</span>
+          <span>{'내일 >'}</span>
         </div>
 
         <div className="scroll-area">
@@ -33,32 +42,45 @@ function GuardianStoryPage({ isStoryReady = false, onTabChange }) {
             </div>
           ) : (
             <>
-              {/* ✅ 부모 페이지 그대로 재사용 */}
               <div className="story-card">
-                <p className="label">AI가 정리한 어머니의 하루</p>
+                <p className="label">AI가 정리한 김옥자 님의 하루</p>
 
                 <h2>{todayStory.title}</h2>
 
                 <p className="desc">{todayStory.summary}</p>
 
-                <button className="primary-btn">
+                <button
+                  type="button"
+                  className="primary-btn"
+                  onClick={() => onComingSoon?.('storyFull')}
+                >
                   오늘 하루 이야기 전체 화면으로 이동 →
                 </button>
               </div>
 
               <p className="section-title">오늘의 사진</p>
               <div className="photo-grid">
-                <img src={photo1} className="photo-item" />
-                <img src={photo2} className="photo-item" />
-                <img src={photo3} className="photo-item" />
-                <div className="photo-item" />
+                <img src={photo1} className="photo-item" alt="오늘의 사진 1" />
+                <img src={photo2} className="photo-item" alt="오늘의 사진 2" />
+                <img src={photo3} className="photo-item" alt="오늘의 사진 3" />
+                <button
+                  type="button"
+                  className="photo-item photo-placeholder"
+                  onClick={() => onComingSoon?.('imageSave')}
+                  aria-label="사진 더보기"
+                />
               </div>
 
               <div className="reaction-row">
                 {reactions.map((item) => (
-                  <span key={item.id} className={`badge ${item.type}`}>
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`badge ${item.type}`}
+                    onClick={() => onComingSoon?.('reactionStats')}
+                  >
                     {item.label} ({item.count})
-                  </span>
+                  </button>
                 ))}
               </div>
 
@@ -72,7 +94,7 @@ function GuardianStoryPage({ isStoryReady = false, onTabChange }) {
                     <div className="comment-bubble">
                       <strong>{item.writer}</strong>
                       <p>{item.message}</p>
-                      <span>25/05/14 20:30</span>
+                      <span>{item.time}</span>
                     </div>
                   </div>
                 ))}
@@ -81,16 +103,20 @@ function GuardianStoryPage({ isStoryReady = false, onTabChange }) {
           )}
         </div>
 
-        {/* ✅ 핵심: 입력창 */}
         {isStoryReady && (
           <div className="reaction-input">
-            <input placeholder="오늘 하루에 반응 남기기..." />
-            <button>전송</button>
+            <button type="button" onClick={() => onComingSoon?.('reactionAdd')}>
+              오늘 하루에 반응 남기기...
+            </button>
           </div>
         )}
 
-        <BottomTab currentTab="story" onTabChange={onTabChange} />
-      </div>
+        <BottomTab
+          currentTab="story"
+          tabs={guardianTabs}
+          onTabChange={onTabChange}
+        />
+      </section>
     </PhoneLayout>
   );
 }

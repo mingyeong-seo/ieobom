@@ -1,64 +1,159 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import "./ParentChatPage.css";
+import './ParentChatPage.css';
 
-import BottomTab from "../../components/common/BottomTab/BottomTab";
-import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
-import { chatMessages, nextAiMessage } from "../../mocks/chats";
-import { todayRoutines } from "../../mocks/routines";
+import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
+import {
+  chatMessages,
+  medicineAnswerMessage,
+  nextAiMessage,
+} from '../../mocks/chats';
 
-function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
-  const [chatStep, setChatStep] = useState("waiting");
+const routineSteps = [
+  {
+    id: 1,
+    title: '아침 약',
+    statusText: '완료',
+    colorClass: 'green',
+    statusClass: 'done',
+  },
+  {
+    id: 2,
+    title: '점심',
+    statusText: '완료',
+    colorClass: 'yellow',
+    statusClass: 'done',
+  },
+  {
+    id: 3,
+    title: '병원',
+    statusText: '완료',
+    colorClass: 'neutral',
+    statusClass: 'done',
+  },
+  {
+    id: 4,
+    title: '저녁 약',
+    statusText: '대기',
+    colorClass: 'pink',
+    statusClass: 'pending',
+  },
+];
 
-  const aiFirstMessage = chatMessages[0];
-  const parentMessage = chatMessages[1];
-  const aiSecondMessage = chatMessages[2];
+function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
+  const [chatStep, setChatStep] = useState('waiting');
+  const [showVoiceGuide, setShowVoiceGuide] = useState(false);
+  const [toastKey, setToastKey] = useState(0);
+
+  const chatBodyRef = useRef(null);
+  const guideTimerRef = useRef(null);
 
   const displayRoutines =
-    chatStep === "completed"
-      ? todayRoutines.map((routine) =>
-        routine.title === "저녁 약"
-          ? {
-            ...routine,
-            status: "completed",
-            statusText: "완료",
-            statusClass: "done",
-          }
-          : routine,
-      )
-      : todayRoutines;
+    chatStep === 'completed'
+      ? routineSteps.map((routine) =>
+          routine.id === 4
+            ? {
+                ...routine,
+                statusText: '완료',
+                statusClass: 'done',
+              }
+            : routine,
+        )
+      : routineSteps;
 
-  const handleCompleteRoutine = () => {
-    setChatStep("thinking");
+  const displayMessages =
+    chatStep === 'completed'
+      ? [...chatMessages, medicineAnswerMessage, nextAiMessage]
+      : chatStep === 'thinking'
+        ? [...chatMessages, medicineAnswerMessage]
+        : chatMessages;
+
+  const latestMessageTime = displayMessages[displayMessages.length - 1]?.time;
+  const statusTime = latestMessageTime?.replace(/\s?(AM|PM)$/i, '') || '21:05';
+
+  const handleVoiceInput = () => {
+    if (chatStep !== 'waiting') {
+      return;
+    }
+
+    setShowVoiceGuide(false);
+    setChatStep('thinking');
 
     setTimeout(() => {
-      setChatStep("completed");
+      setChatStep('completed');
 
       setTimeout(() => {
-        onCompleteRoutine(); // ✅ 메시지 보여주고 바로 이동
-      }, 1000); // ✅ 메시지 읽을 최소 시간
-    }, 2000);
+        onCompleteRoutine?.();
+      }, 3200);
+    }, 1600);
   };
 
+  const handleUnavailableInput = () => {
+    if (guideTimerRef.current) {
+      clearTimeout(guideTimerRef.current);
+    }
+
+    setShowVoiceGuide(false);
+
+    requestAnimationFrame(() => {
+      setToastKey((prev) => prev + 1);
+      setShowVoiceGuide(true);
+    });
+
+    guideTimerRef.current = setTimeout(() => {
+      setShowVoiceGuide(false);
+    }, 1800);
+  };
+
+  useEffect(() => {
+    const chatBody = chatBodyRef.current;
+
+    if (!chatBody) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      chatBody.scrollTo({
+        top: chatBody.scrollHeight,
+        behavior: 'smooth',
+      });
+    });
+  }, [displayMessages.length, chatStep]);
+
+  useEffect(() => {
+    return () => {
+      if (guideTimerRef.current) {
+        clearTimeout(guideTimerRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <PhoneLayout leftStatus="9:41">
+    <PhoneLayout leftStatus={statusTime}>
       <section className="parent-chat-page page-enter">
         <header className="chat-header">
-          <button type="button" className="chat-back-button" onClick={onBack}>
-            &lt;
+          <button type="button" className="chat-exit-button" onClick={onBack}>
+            나가기
           </button>
 
           <h1>오늘의 대화</h1>
+
+          <button
+            type="button"
+            className="chat-icon-button settings"
+            aria-label="대화 설정"
+            onClick={() => onComingSoon?.('chatSettings')}
+          >
+            ⚙
+          </button>
         </header>
 
         <section className="chat-routine-summary">
-          <p>오늘 루틴</p>
-
           <div className="chat-routine-list">
             {displayRoutines.map((routine) => (
               <div
                 key={routine.id}
-                className={`chat-routine-chip ${routine.statusClass} ${routine.colorClass}`}
+                className={`chat-routine-chip ${routine.colorClass} ${routine.statusClass}`}
               >
                 <strong>{routine.title}</strong>
                 <span>{routine.statusText}</span>
@@ -67,74 +162,115 @@ function ParentChatPage({ onBack, onCompleteRoutine, onTabChange }) {
           </div>
         </section>
 
-        <section className="chat-progress">
-          <div className="progress-bar" />
-          <span className="progress-count">오늘의 마지막 대화</span>
+        <section className="chat-body" aria-label="대화 내용" ref={chatBodyRef}>
+          {displayMessages.map((message) => {
+            const isParent = message.sender === 'parent';
+
+            return (
+              <div
+                key={message.id}
+                className={`message-row ${isParent ? 'parent' : 'ai'}`}
+              >
+                {!isParent && <div className="message-avatar" />}
+
+                <div>
+                  <div
+                    className={`message-bubble ${
+                      isParent ? 'parent-bubble' : 'ai-bubble'
+                    }`}
+                  >
+                    {message.text}
+                  </div>
+
+                  <span className={`message-time ${isParent ? 'right' : ''}`}>
+                    {message.time}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+
+          {chatStep === 'thinking' && (
+            <div className="message-row ai">
+              <div className="message-avatar" />
+
+              <div>
+                <div className="message-bubble ai-bubble thinking-bubble">
+                  듣고 있어요. 천천히 말씀해주세요...
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
-        <section className="chat-body">
-          <div className="message-row ai previous">
-            <div className="message-avatar" />
-
-            <div className="message-bubble previous-bubble">
-              이전에 비빔밥 이야기를 나눴어요.
-            </div>
-          </div>
-
-          <div className="message-row ai">
-            <div className="message-avatar" />
-
-            <div className="message-bubble ai-bubble large-bubble">
-              {aiFirstMessage.text}
-            </div>
-          </div>
-
-          <div className="message-row parent">
-            <div className="message-bubble parent-bubble">
-              {parentMessage.text}
-            </div>
-          </div>
-
-          <div className="message-row ai">
-            <div className="message-avatar" />
-
-            <div className="message-bubble ai-bubble large-bubble">
-              {aiSecondMessage.text}
-            </div>
-          </div>
-
-          {chatStep === "thinking" && (
-            <div className="message-row ai">
-              <div className="message-avatar" />
-
-              <div className="message-bubble ai-bubble thinking-bubble">
-                오늘 하루를 정리하고 있어요...
-              </div>
+        <section className="chat-input-area">
+          {showVoiceGuide && (
+            <div key={toastKey} className="voice-guide-toast" role="status">
+              가운데 말하기 버튼을 눌러 답해주세요.
             </div>
           )}
 
-          {chatStep === "completed" && (
-            <div className="message-row ai">
-              <div className="message-avatar" />
-
-              <div className="message-bubble ai-bubble large-bubble">
-                {nextAiMessage.text}
-              </div>
-            </div>
-          )}
-
-          {chatStep === "waiting" && (
+          <div className="quick-action-grid">
             <button
               type="button"
-              className="routine-complete-button"
-              onClick={handleCompleteRoutine}
+              className="quick-action"
+              onClick={handleUnavailableInput}
             >
-              응, 먹었어😊
+              <span>💊</span>
+              방금 약을 먹었어요
             </button>
-          )}
-        </section>
 
-        <BottomTab currentTab="chat" onTabChange={onTabChange} />
+            <button
+              type="button"
+              className="quick-action"
+              onClick={handleUnavailableInput}
+            >
+              <span>🕘</span>
+              조금 있다 먹을게요
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className="voice-input-button"
+            disabled={chatStep !== 'waiting'}
+            onClick={handleVoiceInput}
+          >
+            <span className="voice-ring" aria-hidden="true" />
+            <span className="voice-core" aria-hidden="true">
+              <span className="mic-shape" />
+            </span>
+            <strong>말하기</strong>
+          </button>
+
+          <div className="quick-action-grid">
+            <button
+              type="button"
+              className="quick-action"
+              onClick={handleUnavailableInput}
+            >
+              <span>💧</span>
+              물이랑 같이 먹었어요
+            </button>
+
+            <button
+              type="button"
+              className="quick-action"
+              onClick={handleUnavailableInput}
+            >
+              <span>💬</span>
+              다른 이야기
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className="text-input-button"
+            onClick={handleUnavailableInput}
+          >
+            대화 내용을 직접 입력하기
+          </button>
+        </section>
       </section>
     </PhoneLayout>
   );
