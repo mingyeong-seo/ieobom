@@ -54,6 +54,7 @@ function ParentHomePage({
           className="parent-home-header"
           logoClassName="parent-home-logo"
           onLogoClick={onBackToRole}
+          onProfileClick={() => onComingSoon?.('profile')}
         />
 
         <main className="parent-home-scroll">

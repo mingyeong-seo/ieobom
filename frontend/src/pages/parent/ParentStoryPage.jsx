@@ -1,13 +1,19 @@
-import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
 import BottomTab from '../../components/common/BottomTab/BottomTab';
-import './ParentStoryPage.css';
+import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
+
+import storyIcon from '../../assets/icons/story.png';
+import photo1 from '../../assets/img/story1.png';
+import photo2 from '../../assets/img/story2.png';
+import photo3 from '../../assets/img/story3.png';
 
 import {
-  reactions,
-  reactionComments,
   pendingStory,
+  reactionComments,
+  reactions,
   todayStory,
 } from '../../mocks/stories';
+
+import './ParentStoryPage.css';
 
 function ParentStoryPage({
   isStoryReady = false,
@@ -28,15 +34,15 @@ function ParentStoryPage({
 
   return (
     <PhoneLayout>
-      <div className="parent-story">
-        <header className="parent-home-header">
+      <section className="parent-story">
+        <header className="parent-story-header">
           <h1>기록</h1>
-          <span className="date">5월 12일</span>
+          <span className="date">5월 17일</span>
         </header>
 
         <div className="date-nav">
           <span>{'< 어제'}</span>
-          <span className="today">오늘</span>
+          <span className="today">오늘 기록</span>
           <span>{'내일 >'}</span>
         </div>
 
@@ -54,8 +60,12 @@ function ParentStoryPage({
                   대화를 마치면 AI가 하루를 요약해 드려요
                 </div>
               </div>
+
+              <p className="section-title">가족 반응</p>
               <div className="empty-family">
-                <div className="empty-icon" />
+                <div className="empty-icon">
+                  <img src={storyIcon} alt="이야기" />
+                </div>
 
                 <p className="empty-title">아직 가족의 이야기가 없어요.</p>
 
@@ -64,6 +74,14 @@ function ParentStoryPage({
                   가족들의 반응도 함께 기록돼요.
                 </p>
               </div>
+
+              <button
+                type="button"
+                className="empty-action-btn"
+                onClick={() => handleTabChange('chat')}
+              >
+                대화 시작하기
+              </button>
             </>
           ) : (
             <>
@@ -82,12 +100,18 @@ function ParentStoryPage({
                   오늘 하루 이야기 전체 화면으로 이동 →
                 </button>
               </div>
+
               <p className="section-title">오늘의 사진</p>
               <div className="photo-grid">
-                <div className="photo-item" />
-                <div className="photo-item" />
-                <div className="photo-item" />
-                <div className="photo-item" />
+                <img src={photo1} className="photo-item" alt="오늘의 사진 1" />
+                <img src={photo2} className="photo-item" alt="오늘의 사진 2" />
+                <img src={photo3} className="photo-item" alt="오늘의 사진 3" />
+                <button
+                  type="button"
+                  className="photo-item photo-placeholder"
+                  onClick={() => onComingSoon?.('imageSave')}
+                  aria-label="사진 더보기"
+                />
               </div>
 
               <div className="reaction-row">
@@ -113,7 +137,7 @@ function ParentStoryPage({
                     <div className="comment-bubble">
                       <strong>{item.writer}</strong>
                       <p>{item.message}</p>
-                      <span>2026/05/16 22:30</span>
+                      <span>{item.time}</span>
                     </div>
                   </div>
                 ))}
@@ -123,7 +147,7 @@ function ParentStoryPage({
         </div>
 
         <BottomTab currentTab="story" onTabChange={handleTabChange} />
-      </div>
+      </section>
     </PhoneLayout>
   );
 }

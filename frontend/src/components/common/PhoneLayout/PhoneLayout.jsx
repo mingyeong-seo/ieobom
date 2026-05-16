@@ -10,6 +10,7 @@ function PhoneLayout({
   showAndroidNav = true,
   statusTone = 'default',
   navTone = 'default',
+  fullScreenContent = false,
 }) {
   return (
     <main className="phone-layout-app">
@@ -38,7 +39,9 @@ function PhoneLayout({
               </div>
             </header>
 
-            <div className="phone-content">{children}</div>
+            <div className={`phone-content ${fullScreenContent ? 'full-screen' : ''}`}>
+              {children}
+            </div>
 
             {showAndroidNav && (
               <div className={`android-nav-bar ${navTone}`} aria-hidden="true">

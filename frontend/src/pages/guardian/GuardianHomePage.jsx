@@ -28,6 +28,7 @@ function GuardianHomePage({
           profileImage={daughterProfile}
           profileAlt="보호자 프로필"
           onLogoClick={onBackToRole}
+          onProfileClick={() => onComingSoon?.('profile')}
         />
 
         <main className="guardian-home-scroll">
@@ -61,7 +62,9 @@ function GuardianHomePage({
 
           <section className="ai-suggestion-section">
             <div className="section-header">
-              <h2>AI 제안 <span aria-hidden="true">💌</span></h2>
+              <h2>
+                AI 제안 <span aria-hidden="true">💌</span>
+              </h2>
             </div>
 
             <div className="ai-suggestion-card">
@@ -85,16 +88,7 @@ function GuardianHomePage({
         <BottomTab
           currentTab="home"
           tabs={guardianTabs}
-          onTabChange={(tab) => {
-            if (tab === 'story') {
-              onGoStory();
-              return;
-            }
-
-            if (onTabChange) {
-              onTabChange(tab);
-            }
-          }}
+          onTabChange={onTabChange}
         />
       </section>
     </PhoneLayout>

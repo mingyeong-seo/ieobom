@@ -34,7 +34,12 @@ function SplashPage({ role, onNext, onBackToRole }) {
   const lockTone = isGuardian ? 'guardian-lock' : 'parent-lock';
 
   return (
-    <PhoneLayout leftStatus="" statusTone={lockTone} navTone={lockTone}>
+    <PhoneLayout
+      leftStatus=""
+      statusTone={lockTone}
+      navTone={lockTone}
+      fullScreenContent
+    >
       <section
         className={`lock-screen page-enter ${
           isGuardian ? 'guardian-lock' : 'parent-lock'

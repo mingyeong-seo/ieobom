@@ -69,4 +69,9 @@ export const comingSoonContent = {
     title: '대화 설정 기능은 준비 중이에요.',
     description: '대화 방식과 알림을 더 편하게 조정할 수 있도록 준비하고 있어요.',
   },
+  profile: {
+    icon: '👤',
+    title: '프로필 기능은 준비 중이에요.',
+    description: '가족 정보를 더 편하게 확인하고 수정할 수 있도록 준비하고 있어요.',
+  },
 };

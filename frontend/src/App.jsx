@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import ComingSoonPage from "./pages/comingSoon/ComingSoonPage";
 import GuardianHomePage from "./pages/guardian/GuardianHomePage";
@@ -11,37 +11,24 @@ import RoleSelectPage from "./pages/role/RoleSelectPage";
 import SplashPage from "./pages/splash/SplashPage";
 import StoryGeneratingPage from "./pages/story/StoryGeneratingPage";
 
-const STORAGE_KEY = "ieobom-app-state";
-
-const getSavedAppState = () => {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  } catch {
-    return {};
-  }
-};
+if (typeof window !== "undefined") {
+  localStorage.removeItem("ieobom-app-state");
+  sessionStorage.removeItem("ieobom-app-state");
+}
 
 function App() {
-  const savedAppState = getSavedAppState();
-
-  const [page, setPage] = useState(savedAppState.page || "role");
-  const [selectedRole, setSelectedRole] = useState(
-    savedAppState.selectedRole || null,
-  );
-
-  const [isParentStoryReady, setIsParentStoryReady] = useState(
-    savedAppState.isParentStoryReady || false,
-  );
-  const [isRoutineCompleted, setIsRoutineCompleted] = useState(
-    savedAppState.isRoutineCompleted || false,
-  );
+  const [page, setPage] = useState("role");
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [isParentStoryReady, setIsParentStoryReady] = useState(false);
+  const [isRoutineCompleted, setIsRoutineCompleted] = useState(false);
   const [comingSoon, setComingSoon] = useState({
-    feature: savedAppState.comingSoon?.feature || "album",
-    returnPage: savedAppState.comingSoon?.returnPage || "parentHome",
+    feature: "album",
+    returnPage: "parentHome",
   });
 
   const handleBackToRole = () => {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem("ieobom-app-state");
+    sessionStorage.removeItem("ieobom-app-state");
     setSelectedRole(null);
     setIsParentStoryReady(false);
     setIsRoutineCompleted(false);
@@ -101,19 +88,6 @@ function App() {
     setPage("comingSoon");
   };
 
-  useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        page,
-        selectedRole,
-        isParentStoryReady,
-        isRoutineCompleted,
-        comingSoon,
-      }),
-    );
-  }, [page, selectedRole, isParentStoryReady, isRoutineCompleted, comingSoon]);
-
   if (page === "role") {
     return (
       <RoleSelectPage
@@ -142,9 +116,7 @@ function App() {
             setPage("guardianHome");
           }
         }}
-        onBackToRole={() => {
-          handleBackToRole();
-        }}
+        onBackToRole={handleBackToRole}
       />
     );
   }
@@ -171,7 +143,6 @@ function App() {
           setIsParentStoryReady(true);
           setPage("storyGenerating");
         }}
-        onTabChange={handleParentTabChange}
       />
     );
   }
@@ -200,7 +171,9 @@ function App() {
   if (page === "guardianStory") {
     return (
       <GuardianStoryPage
-        onBackToRole={handleBackToRole}
+        isStoryReady
+        onBackToRole={requestBackToRole}
+        onComingSoon={(feature) => openComingSoon(feature, "guardianStory")}
         onTabChange={handleGuardianTabChange}
       />
     );
@@ -227,11 +200,7 @@ function App() {
   }
 
   if (page === "storyGenerating") {
-    return (
-      <StoryGeneratingPage
-        onDone={() => setPage("parentStory")}
-      />
-    );
+    return <StoryGeneratingPage onDone={() => setPage("parentStory")} />;
   }
 
   return null;

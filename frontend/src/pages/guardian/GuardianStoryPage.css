@@ -1,7 +1,6 @@
-@import '../home/HomeShared.css';
-
 .guardian-story {
   position: relative;
+
   height: 100%;
 
   background: #fffaf4;
@@ -12,34 +11,86 @@
   overflow: hidden;
 }
 
-.guardian-story-scroll {
+.guardian-story .app-header {
+  position: static;
+}
+
+.guardian-story .date-nav {
+  flex-shrink: 0;
+
+  padding: 0 18px;
+}
+
+.guardian-story .scroll-area {
   flex: 1;
   min-height: 0;
 
-  padding: 0 18px 112px;
+  margin-right: 4px;
+  margin-bottom: 154px;
+  padding: 0 14px 0 18px;
 
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.guardian-story-hero {
-  padding: 24px 0;
+.guardian-story .scroll-area::-webkit-scrollbar {
+  width: 8px;
 }
 
-.guardian-story-hero p {
-  margin: 0 0 8px;
+.guardian-story .scroll-area::-webkit-scrollbar-thumb {
+  background: #d8cfc7;
+  border-radius: 10px;
+}
 
-  color: var(--color-primary);
+.guardian-story .reaction-input {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 104px;
+  z-index: 12;
 
+  padding: 10px 16px;
+
+  background: #fffaf4;
+}
+
+.guardian-story .reaction-input button {
+  width: 100%;
+  height: 48px;
+
+  border: 1px solid #eadfd5;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.92);
+  color: #7a6a5c;
+
+  font: inherit;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 900;
+
+  cursor: pointer;
 }
 
-.guardian-story-hero h1 {
-  margin: 0;
+.empty-guardian {
+  margin-top: 80px;
+
+  color: #9a7b6f;
+
+  text-align: center;
+}
+
+.empty-guardian h2 {
+  margin: 0 0 10px;
 
   color: var(--color-text);
 
-  font-size: 26px;
-  font-weight: 800;
-  line-height: 1.35;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.empty-guardian p {
+  margin: 4px 0;
+
+  font-size: 16px;
+  font-weight: 600;
 }

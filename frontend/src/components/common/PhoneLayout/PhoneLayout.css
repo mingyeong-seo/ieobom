@@ -161,6 +161,13 @@
   overflow: hidden;
 }
 
+.phone-content.full-screen {
+  position: absolute;
+  inset: 0;
+
+  height: 100%;
+}
+
 .phone-home-indicator {
   display: none;
 }
