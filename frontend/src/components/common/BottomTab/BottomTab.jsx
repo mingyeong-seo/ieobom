@@ -13,7 +13,7 @@ const defaultTabs = [
   },
   {
     id: 'story',
-    icon: '▤',
+    icon: '📝',
     label: '기록',
   },
 ];

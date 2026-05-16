@@ -10,6 +10,7 @@ import ParentStoryPage from "./pages/parent/ParentStoryPage";
 import RoleSelectPage from "./pages/role/RoleSelectPage";
 import SplashPage from "./pages/splash/SplashPage";
 import StoryGeneratingPage from "./pages/story/StoryGeneratingPage";
+import { reactions } from "./mocks/stories";
 
 if (typeof window !== "undefined") {
   localStorage.removeItem("ieobom-app-state");
@@ -21,6 +22,12 @@ function App() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [isParentStoryReady, setIsParentStoryReady] = useState(false);
   const [isRoutineCompleted, setIsRoutineCompleted] = useState(false);
+  const [parentReactionCounts, setParentReactionCounts] = useState(() =>
+    reactions.reduce((counts, item) => {
+      counts[item.id] = 0;
+      return counts;
+    }, {}),
+  );
   const [comingSoon, setComingSoon] = useState({
     feature: "album",
     returnPage: "parentHome",
@@ -32,6 +39,12 @@ function App() {
     setSelectedRole(null);
     setIsParentStoryReady(false);
     setIsRoutineCompleted(false);
+    setParentReactionCounts(
+      reactions.reduce((counts, item) => {
+        counts[item.id] = 0;
+        return counts;
+      }, {}),
+    );
     setComingSoon({
       feature: "album",
       returnPage: "parentHome",
@@ -86,6 +99,13 @@ function App() {
       returnPage,
     });
     setPage("comingSoon");
+  };
+
+  const handleParentReactionClick = (id) => {
+    setParentReactionCounts((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1,
+    }));
   };
 
   if (page === "role") {
@@ -151,7 +171,10 @@ function App() {
     return (
       <ParentStoryPage
         isStoryReady={isParentStoryReady}
+        onBackToRole={requestBackToRole}
         onComingSoon={(feature) => openComingSoon(feature, "parentStory")}
+        reactionCounts={parentReactionCounts}
+        onReactionClick={handleParentReactionClick}
         onTabChange={handleParentTabChange}
       />
     );
@@ -174,6 +197,7 @@ function App() {
         isStoryReady
         onBackToRole={requestBackToRole}
         onComingSoon={(feature) => openComingSoon(feature, "guardianStory")}
+        parentReactionCounts={parentReactionCounts}
         onTabChange={handleGuardianTabChange}
       />
     );

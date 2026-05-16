@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import AppHeader from "../../components/common/AppHeader/AppHeader";
 import BottomTab from "../../components/common/BottomTab/BottomTab";
 import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
@@ -16,8 +18,29 @@ function GuardianStoryPage({
   isStoryReady = true,
   onBackToRole,
   onComingSoon,
+  parentReactionCounts = {},
   onTabChange,
 }) {
+  const [reactionCounts, setReactionCounts] = useState(() =>
+    reactions.reduce((counts, item) => {
+      counts[item.id] = item.count + (parentReactionCounts[item.id] || 0);
+      return counts;
+    }, {}),
+  );
+
+  const handleReactionClick = (id) => {
+    setReactionCounts((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1,
+    }));
+  };
+
+  const handleDateMoveClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onComingSoon?.("storyCalendar");
+  };
+
   return (
     <PhoneLayout>
       <section className="guardian-story">
@@ -25,12 +48,27 @@ function GuardianStoryPage({
           className="parent-home-header"
           profileImage={daughterProfile}
           onLogoClick={onBackToRole}
+          onProfileClick={() => onComingSoon?.("profile")}
         />
 
         <div className="date-nav">
-          <span>{"< 어제"}</span>
+          <button
+            type="button"
+            onPointerDown={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={handleDateMoveClick}
+          >
+            {"< 어제"}
+          </button>
           <span className="today">오늘 기록</span>
-          <span>{"내일 >"}</span>
+          <button
+            type="button"
+            onPointerDown={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={handleDateMoveClick}
+          >
+            {"내일 >"}
+          </button>
         </div>
 
         <div className="scroll-area">
@@ -60,16 +98,26 @@ function GuardianStoryPage({
 
               <p className="section-title">오늘의 사진</p>
               <div className="photo-grid">
-                <img src={photo1} className="photo-item" />
-                <img src={photo2} className="photo-item" />
-                <img src={photo3} className="photo-item" />
-                <button className="photo-item photo-placeholder" />
+                <img src={photo1} className="photo-item" alt="오늘의 사진 1" />
+                <img src={photo2} className="photo-item" alt="오늘의 사진 2" />
+                <img src={photo3} className="photo-item" alt="오늘의 사진 3" />
+                <button
+                  type="button"
+                  className="photo-item photo-placeholder"
+                  onClick={() => onComingSoon?.("imageSave")}
+                  aria-label="사진 더보기"
+                />
               </div>
 
               <div className="reaction-row">
                 {reactions.map((item) => (
-                  <button key={item.id} className={`badge ${item.type}`}>
-                    {item.label} <br />({item.count})
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`badge ${item.type}`}
+                    onClick={() => handleReactionClick(item.id)}
+                  >
+                    {item.label} <br />({reactionCounts[item.id]})
                   </button>
                 ))}
               </div>
@@ -96,7 +144,7 @@ function GuardianStoryPage({
         {isStoryReady && (
           <div className="reaction-input">
             <button type="button" onClick={() => onComingSoon?.("reactionAdd")}>
-              오늘 하루에 반응 남기기...
+              오늘 하루 안부 남기기...
             </button>
           </div>
         )}

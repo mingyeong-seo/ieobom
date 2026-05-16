@@ -25,7 +25,7 @@ export const routines = [
   {
     id: 2,
     title: '점심',
-    time: '12:30',
+    time: '13:00',
     status: 'completed',
     statusText: '완료',
     statusClass: 'done',

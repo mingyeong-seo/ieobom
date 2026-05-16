@@ -10,7 +10,6 @@ import photo3 from "../../assets/img/story3.png";
 
 import {
   pendingStory,
-  reactionComments,
   reactions,
   todayStory,
 } from "../../mocks/stories";
@@ -19,7 +18,10 @@ import "./ParentStoryPage.css";
 
 function ParentStoryPage({
   isStoryReady = false,
+  onBackToRole,
   onComingSoon,
+  reactionCounts,
+  onReactionClick,
   onTabChange,
   onGoHome,
 }) {
@@ -34,6 +36,12 @@ function ParentStoryPage({
     }
   };
 
+  const handleDateMoveClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onComingSoon?.("storyCalendar");
+  };
+
   return (
     <PhoneLayout>
       <section className="parent-story">
@@ -41,14 +49,28 @@ function ParentStoryPage({
           className="parent-home-header"
           logoClassName="parent-home-logo"
           profileImage={profileImg}
-          onLogoClick={onGoHome}
+          onLogoClick={onBackToRole}
           onProfileClick={() => onComingSoon?.('profile')}
         />
 
         <div className="date-nav">
-          <span>{"< 어제"}</span>
+          <button
+            type="button"
+            onPointerDown={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={handleDateMoveClick}
+          >
+            {"< 어제"}
+          </button>
           <span className="today">오늘 기록</span>
-          <span>{"내일 >"}</span>
+          <button
+            type="button"
+            onPointerDown={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={handleDateMoveClick}
+          >
+            {"내일 >"}
+          </button>
         </div>
 
         <div className="scroll-area">
@@ -119,15 +141,21 @@ function ParentStoryPage({
                 />
               </div>
 
+              <p className="section-title">간단 반응</p>
               <div className="reaction-row">
                 {reactions.map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     className={`badge ${item.type}`}
-                    onClick={() => onComingSoon?.("reactionStats")}
+                    onClick={() => onReactionClick?.(item.id)}
                   >
-                    {item.label} <br/> ({item.count})
+                    {item.label}
+                    {(reactionCounts?.[item.id] || 0) > 0 && (
+                      <>
+                        <br />({reactionCounts[item.id]})
+                      </>
+                    )}
                   </button>
                 ))}
               </div>
@@ -135,17 +163,15 @@ function ParentStoryPage({
               <div className="family-section">
                 <p className="section-title">가족 반응</p>
 
-                {reactionComments.map((item) => (
-                  <div key={item.id} className="comment-item">
-                    <div className="avatar" />
-
-                    <div className="comment-bubble">
-                      <strong>{item.writer}</strong>
-                      <p>{item.message}</p>
-                      <span>{item.time}</span>
-                    </div>
-                  </div>
-                ))}
+                <div className="family-waiting-card">
+                  <div className="family-waiting-icon">💌</div>
+                  <strong>가족의 반응을 기다리고 있어요</strong>
+                  <p>
+                    오늘 기록이 가족에게 전달되면
+                    <br />
+                    따뜻한 반응이 이곳에 표시돼요.
+                  </p>
+                </div>
               </div>
             </>
           )}

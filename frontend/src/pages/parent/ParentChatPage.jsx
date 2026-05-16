@@ -64,7 +64,7 @@ function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
   const displayMessages =
     chatStep === 'completed'
       ? [...chatMessages, medicineAnswerMessage, nextAiMessage]
-      : chatStep === 'thinking'
+      : chatStep === 'answered'
         ? [...chatMessages, medicineAnswerMessage]
         : chatMessages;
 
@@ -77,14 +77,18 @@ function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
     }
 
     setShowVoiceGuide(false);
-    setChatStep('thinking');
+    setChatStep('listening');
 
     setTimeout(() => {
-      setChatStep('completed');
+      setChatStep('answered');
 
       setTimeout(() => {
-        onCompleteRoutine?.();
-      }, 3200);
+        setChatStep('completed');
+
+        setTimeout(() => {
+          onCompleteRoutine?.();
+        }, 3200);
+      }, 1100);
     }, 1600);
   };
 
@@ -190,13 +194,13 @@ function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
             );
           })}
 
-          {chatStep === 'thinking' && (
+          {chatStep === 'listening' && (
             <div className="message-row ai">
               <div className="message-avatar" />
 
               <div>
                 <div className="message-bubble ai-bubble thinking-bubble">
-                  듣고 있어요. 천천히 말씀해주세요...
+                  듣고 있어요. 천천히 말씀해 주세요...
                 </div>
               </div>
             </div>

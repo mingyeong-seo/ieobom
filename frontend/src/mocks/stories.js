@@ -19,14 +19,14 @@ export const reactions = [
   {
     id: 1,
     type: 'love',
-    label: '잘했어요',
+    label: '보고싶어요',
     emoji: '❤️',
     count: 2,
   },
   {
     id: 2,
     type: 'miss',
-    label: '보고싶어요',
+    label: '고마워요',
     emoji: '😊',
     count: 1,
   },

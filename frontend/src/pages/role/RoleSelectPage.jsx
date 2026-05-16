@@ -77,7 +77,7 @@ function RoleSelectPage({ onSelectParent, onSelectGuardian }) {
         <p className="role-help">
           * MVP 체험용 프로토타입입니다.
           <br />
-          일부 이미지는 AI로 제작된 예시 이미지입니다.
+          사용된 이미지는 AI로 제작된 예시 이미지입니다.
         </p>
       </section>
     </PhoneLayout>

@@ -21,6 +21,9 @@
 
 /* 날짜 영역 */
 .guardian-story .date-nav {
+  position: relative;
+  z-index: 20;
+
   margin-top: 12px;
   margin-bottom: 20px;
   display: flex;
@@ -34,6 +37,22 @@
 .guardian-story .date-nav .today {
   color: var(--color-text);
   font-weight: 900;
+}
+
+.guardian-story .date-nav button {
+  position: relative;
+  z-index: 21;
+
+  border: 0;
+  padding: 6px 0;
+
+  background: transparent;
+  color: var(--color-sub-text);
+
+  font: inherit;
+  font-weight: 700;
+
+  cursor: pointer;
 }
 
 /* 스크롤 */

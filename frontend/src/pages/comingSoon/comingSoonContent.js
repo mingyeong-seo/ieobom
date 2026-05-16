@@ -74,4 +74,9 @@ export const comingSoonContent = {
     title: '프로필 기능은 준비 중이에요.',
     description: '가족 정보를 더 편하게 확인하고 수정할 수 있도록 준비하고 있어요.',
   },
+  storyCalendar: {
+    icon: '📅',
+    title: '이전/다음 기록 기능은 준비 중이에요.',
+    description: '다른 날짜의 하루 기록도 볼 수 있도록 준비하고 있어요.',
+  },
 };

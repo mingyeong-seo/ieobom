@@ -6,7 +6,7 @@ export const guardianTabs = [
   },
   {
     id: 'story',
-    icon: '▤',
+    icon: '📝',
     label: '기록',
   },
   {
