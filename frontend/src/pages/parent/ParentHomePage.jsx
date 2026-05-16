@@ -48,7 +48,7 @@ function ParentHomePage({
   });
 
   return (
-    <PhoneLayout leftStatus="21:05">
+    <PhoneLayout leftStatus="9:00">
       <section className="parent-home page-enter">
         <AppHeader
           className="parent-home-header"

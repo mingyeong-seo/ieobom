@@ -220,6 +220,17 @@
   height: 34px;
   border-radius: 50%;
   background: #ffe5d6;
+
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.guardian-story .avatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+  object-fit: cover;
 }
 
 .guardian-story .comment-bubble {

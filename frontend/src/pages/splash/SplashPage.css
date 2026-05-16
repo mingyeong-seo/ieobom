@@ -140,6 +140,11 @@
     filter 0.18s ease;
 }
 
+.guardian-lock .notification-card {
+  opacity: 1;
+  animation: none;
+}
+
 .notification-card:hover,
 .notification-card:focus-visible {
   background: rgba(255, 255, 255, 0.92);

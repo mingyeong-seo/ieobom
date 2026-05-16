@@ -42,7 +42,7 @@ function GuardianStoryPage({
   };
 
   return (
-    <PhoneLayout>
+    <PhoneLayout leftStatus="6:30">
       <section className="guardian-story">
         <AppHeader
           className="parent-home-header"
@@ -127,7 +127,11 @@ function GuardianStoryPage({
 
                 {reactionComments.map((item) => (
                   <div key={item.id} className="comment-item">
-                    <div className="avatar" />
+                    <div className="avatar">
+                      {item.profileImage && (
+                        <img src={item.profileImage} alt={`${item.writer} 프로필`} />
+                      )}
+                    </div>
                     <div className="comment-bubble">
                       <strong>{item.writer}</strong>
                       <p>{item.message}</p>

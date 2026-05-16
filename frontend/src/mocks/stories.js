@@ -1,3 +1,6 @@
+import childProfile1 from '../assets/images/child-profle1.jpg';
+import childProfile2 from '../assets/images/child-profle2.jpg';
+
 export const todayStory = {
   id: 1,
   date: '2026-05-17',
@@ -45,12 +48,14 @@ export const reactionComments = [
     writer: '딸',
     message: '오늘도 약 잘 챙겨 드셨네요😁',
     time: '2026/05/17 21:32',
+    profileImage: childProfile1,
   },
   {
     id: 2,
     writer: '아들',
     message: '다음엔 비빔밥 같이 먹으러 가요!',
     time: '2026/05/17 21:47',
+    profileImage: childProfile2,
   },
 ];
 

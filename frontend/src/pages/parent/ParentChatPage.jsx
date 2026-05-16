@@ -68,9 +68,6 @@ function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
         ? [...chatMessages, medicineAnswerMessage]
         : chatMessages;
 
-  const latestMessageTime = displayMessages[displayMessages.length - 1]?.time;
-  const statusTime = latestMessageTime?.replace(/\s?(AM|PM)$/i, '') || '21:05';
-
   const handleVoiceInput = () => {
     if (chatStep !== 'waiting') {
       return;
@@ -133,7 +130,7 @@ function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
   }, []);
 
   return (
-    <PhoneLayout leftStatus={statusTime}>
+    <PhoneLayout leftStatus="9:00">
       <section className="parent-chat-page page-enter">
         <header className="chat-header">
           <button type="button" className="chat-exit-button" onClick={onBack}>

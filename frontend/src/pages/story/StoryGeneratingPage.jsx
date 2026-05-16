@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
 import "./StoryGeneratingPage.css";
 
-function StoryGeneratingPage({ onDone }) {
+function StoryGeneratingPage({ leftStatus = "9:00", onDone }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onDone();
@@ -12,7 +12,7 @@ function StoryGeneratingPage({ onDone }) {
   }, [onDone]);
 
   return (
-    <PhoneLayout>
+    <PhoneLayout leftStatus={leftStatus}>
       <div className="story-generating">
         <div className="loading-wrapper">
           <div className="loading-circle">

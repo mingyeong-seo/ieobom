@@ -4,11 +4,11 @@ import { comingSoonContent } from './comingSoonContent';
 
 import './ComingSoonPage.css';
 
-function ComingSoonPage({ feature = 'album', onBack, onHome }) {
+function ComingSoonPage({ feature = 'album', leftStatus = '9:00', onBack, onHome }) {
   const content = comingSoonContent[feature] || comingSoonContent.album;
 
   return (
-    <PhoneLayout leftStatus="9:05">
+    <PhoneLayout leftStatus={leftStatus}>
       <section className="coming-soon-page page-enter">
         <header className="coming-soon-header">
           <button type="button" aria-label="이전으로 돌아가기" onClick={onBack}>

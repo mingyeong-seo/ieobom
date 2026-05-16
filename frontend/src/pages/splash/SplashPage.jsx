@@ -9,9 +9,9 @@ import parentScreen from '../../assets/images/parentScreen.jpg';
 function SplashPage({ role, onNext, onBackToRole }) {
   const isGuardian = role === 'guardian';
 
-  const currentTime = isGuardian ? '6:30' : '21:05';
+  const currentTime = isGuardian ? '6:30' : '9:00';
   const currentDate = isGuardian ? '5월 18일 월요일' : '5월 17일 일요일';
-  const notificationTime = isGuardian ? '30분 전' : '5분 전';
+  const notificationTime = isGuardian ? '30분 전' : '지금';
 
   const notificationMessage = isGuardian
     ? '부모님의 하루 이야기가 도착했어요'

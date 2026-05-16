@@ -25,7 +25,7 @@ function SettingRow({ icon, title, description, rightText, toggle, onClick }) {
 
 function GuardianSettingsPage({ onBackToRole, onComingSoon, onTabChange }) {
   return (
-    <PhoneLayout leftStatus="9:41">
+    <PhoneLayout leftStatus="6:30">
       <section className="guardian-settings page-enter">
         <main className="guardian-settings-scroll">
           <h1>설정</h1>

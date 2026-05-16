@@ -36,9 +36,9 @@ function RoleSelectPage({ onSelectParent, onSelectGuardian }) {
           <button
             type="button"
             className="role-card parent"
-            onMouseEnter={() => setRoleTime('21:05')}
+            onMouseEnter={() => setRoleTime('9:00')}
             onMouseLeave={() => setRoleTime('')}
-            onFocus={() => setRoleTime('21:05')}
+            onFocus={() => setRoleTime('9:00')}
             onBlur={() => setRoleTime('')}
             onClick={() => handleSelect(onSelectParent)}
           >

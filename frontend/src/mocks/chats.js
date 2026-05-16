@@ -35,12 +35,12 @@ export const nextAiMessage = {
   id: 7,
   sender: 'ai',
   text: '좋아요. 오늘 약 복용까지 기록됐어요.\n이제 하루 이야기를 정리해볼게요.',
-  time: '21:07 PM',
+  time: '21:00 PM',
 };
 
 export const medicineAnswerMessage = {
   id: 6,
   sender: 'parent',
   text: '응, 방금 물이랑 같이 먹었어.',
-  time: '21:07 PM',
+  time: '21:00 PM',
 };

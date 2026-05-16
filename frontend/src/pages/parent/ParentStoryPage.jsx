@@ -43,7 +43,7 @@ function ParentStoryPage({
   };
 
   return (
-    <PhoneLayout>
+    <PhoneLayout leftStatus="9:00">
       <section className="parent-story">
         <AppHeader
           className="parent-home-header"

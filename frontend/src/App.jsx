@@ -93,6 +93,9 @@ function App() {
   const getRoleHomePage = () =>
     selectedRole === "guardian" ? "guardianHome" : "parentHome";
 
+  const getRoleStatusTime = () =>
+    selectedRole === "guardian" ? "6:30" : "9:00";
+
   const openComingSoon = (feature, returnPage = page) => {
     setComingSoon({
       feature,
@@ -217,6 +220,7 @@ function App() {
     return (
       <ComingSoonPage
         feature={comingSoon.feature}
+        leftStatus={getRoleStatusTime()}
         onBack={() => setPage(comingSoon.returnPage)}
         onHome={() => setPage(getRoleHomePage())}
       />
@@ -224,7 +228,12 @@ function App() {
   }
 
   if (page === "storyGenerating") {
-    return <StoryGeneratingPage onDone={() => setPage("parentStory")} />;
+    return (
+      <StoryGeneratingPage
+        leftStatus={getRoleStatusTime()}
+        onDone={() => setPage("parentStory")}
+      />
+    );
   }
 
   return null;
