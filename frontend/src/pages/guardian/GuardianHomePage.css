@@ -1,108 +1,122 @@
-.guardian-home {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: #fffaf4;
-    padding: 18px 18px 84px;
+@import '../home/HomeShared.css';
+
+.routine-action-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  color: var(--color-primary-dark);
+
+  font-size: 15px;
+  font-weight: 700;
 }
 
-/* 헤더 */
-.parent-home-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
+.routine-action-group button {
+  border: 0;
+  padding: 0;
+
+  background: transparent;
+
+  color: var(--color-primary-dark);
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
 }
 
-.parent-home-header h1 {
-    margin: 0;
-    color: var(--color-primary);
-    font-size: 18px;
-    font-weight: 700;
+.routine-action-group span {
+  color: #b7aaa0;
 }
 
-.profile-circle {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: #f6e4d4;
+.ai-suggestion-section {
+  margin-bottom: 26px;
 }
 
-/* 인사 영역 */
-.greeting {
-    margin: 0 -18px 18px;
-    padding: 20px 18px;
-    background: #fee7de;
+.ai-suggestion-card {
+  position: relative;
+
+  padding: 20px 20px 18px;
+
+  border: 1px solid #f0d9c8;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at 100% 100%, rgba(216, 137, 85, 0.12), transparent 34%),
+    linear-gradient(145deg, #fff8ed 0%, #fffdf8 100%);
+
+  overflow: hidden;
+
+  box-shadow: 0 10px 24px rgba(120, 80, 54, 0.08);
 }
 
-.greeting h2 {
-    margin: 0;
+.ai-suggestion-card::after {
+  content: '';
+
+  position: absolute;
+  right: -52px;
+  bottom: -62px;
+
+  width: 170px;
+  height: 170px;
+
+  border: 2px solid rgba(216, 137, 85, 0.1);
+  border-radius: 50%;
 }
 
-.greeting h3 {
-    margin: 8px 0;
+.ai-suggestion-card strong {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+
+  max-width: 230px;
+  margin-bottom: 10px;
+
+  color: var(--color-text);
+
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
 }
 
-.greeting p {
-    color: #777;
-    font-size: 14px;
-    margin: 15px 0 0;
+.ai-suggestion-card p {
+  position: relative;
+  z-index: 1;
+
+  margin: 0 0 14px;
+
+  color: var(--color-text);
+
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.4px;
 }
 
-/* 섹션 */
-.section {
-    padding: 16px;
-    padding-bottom: 80px;
-    flex: 1;
+.ai-suggestion-card button {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  height: 46px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, var(--color-primary) 0%, #c77b48 100%);
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 800;
+
+  box-shadow: 0 8px 18px rgba(216, 137, 85, 0.22);
+
+  cursor: pointer;
 }
 
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-}
-
-.edit {
-    color: #999;
-    font-size: 14px;
-}
-
-/* 카드 리스트 */
-.card-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.card-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.title {
-    font-weight: 500;
-    margin-bottom: 10px;
-}
-
-.time {
-    font-size: 12px;
-    color: #999;
-}
-
-/* 체크 버튼 */
-.check {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 1px solid #ff7a3d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.check.done {
-    background: #ff7a3d;
-    color: white;
+.ai-suggestion-card button:hover,
+.ai-suggestion-card button:focus-visible {
+  filter: brightness(1.03);
 }

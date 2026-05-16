@@ -12,7 +12,7 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-right: 6px;
-    margin-bottom: 84px;
+    margin-bottom: 104px;
 
     margin-right: -14px;
 }
@@ -176,9 +176,12 @@
 
 .badge {
     padding: 6px 10px;
+    border: 0;
     border-radius: 999px;
+    font: inherit;
     font-size: 12px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .badge.orange {

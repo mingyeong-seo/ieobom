@@ -6,18 +6,17 @@ import wifiIcon from '../../../assets/icons/wifi.png';
 
 function PhoneLayout({
   children,
-  // 상단 왼쪽 시간 표시 값(화면별 시간 값 변경 가능)
   leftStatus = '9:41',
-  showHomeIndicator = false,
+  showAndroidNav = true,
+  statusTone = 'default',
+  navTone = 'default',
 }) {
   return (
     <main className="phone-layout-app">
       <div className="phone-stage">
         <section className="phone-frame">
-          <div className="phone-notch" />
-
           <div className="phone-screen">
-            <header className="phone-status-bar">
+            <header className={`phone-status-bar ${statusTone}`}>
               <span className="phone-carrier">{leftStatus}</span>
 
               <div className="phone-status-icons" aria-label="상태 아이콘">
@@ -41,7 +40,13 @@ function PhoneLayout({
 
             <div className="phone-content">{children}</div>
 
-            {showHomeIndicator && <div className="phone-home-indicator" />}
+            {showAndroidNav && (
+              <div className={`android-nav-bar ${navTone}`} aria-hidden="true">
+                <span>|||</span>
+                <span>○</span>
+                <span>‹</span>
+              </div>
+            )}
           </div>
         </section>
       </div>

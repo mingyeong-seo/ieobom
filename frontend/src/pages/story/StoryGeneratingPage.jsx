@@ -5,11 +5,11 @@ import "./StoryGeneratingPage.css";
 function StoryGeneratingPage({ onDone }) {
   useEffect(() => {
     const timer = setTimeout(() => {
-      onDone(); // ✅ 일정 시간 후 이동
+      onDone();
     }, 3500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [onDone]);
 
   return (
     <PhoneLayout>

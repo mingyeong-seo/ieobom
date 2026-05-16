@@ -1,0 +1,45 @@
+@import '../home/HomeShared.css';
+
+.guardian-story {
+  position: relative;
+  height: 100%;
+
+  background: #fffaf4;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.guardian-story-scroll {
+  flex: 1;
+  min-height: 0;
+
+  padding: 0 18px 112px;
+
+  overflow-y: auto;
+}
+
+.guardian-story-hero {
+  padding: 24px 0;
+}
+
+.guardian-story-hero p {
+  margin: 0 0 8px;
+
+  color: var(--color-primary);
+
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.guardian-story-hero h1 {
+  margin: 0;
+
+  color: var(--color-text);
+
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.35;
+}

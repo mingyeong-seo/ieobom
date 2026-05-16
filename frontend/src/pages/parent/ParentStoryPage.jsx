@@ -1,23 +1,27 @@
-import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
-import BottomTab from "../../components/common/BottomTab/BottomTab";
-import "./ParentStoryPage.css";
+import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
+import BottomTab from '../../components/common/BottomTab/BottomTab';
+import './ParentStoryPage.css';
 
 import {
   reactions,
   reactionComments,
   pendingStory,
   todayStory,
-} from "../../mocks/stories";
+} from '../../mocks/stories';
 
-
-function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
+function ParentStoryPage({
+  isStoryReady = false,
+  onComingSoon,
+  onTabChange,
+  onGoHome,
+}) {
   const handleTabChange = (tab) => {
     if (onTabChange) {
       onTabChange(tab);
       return;
     }
 
-    if (tab === "home" && onGoHome) {
+    if (tab === 'home' && onGoHome) {
       onGoHome();
     }
   };
@@ -31,9 +35,9 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
         </header>
 
         <div className="date-nav">
-          <span>{"< 어제"}</span>
+          <span>{'< 어제'}</span>
           <span className="today">오늘</span>
-          <span>{"내일 >"}</span>
+          <span>{'내일 >'}</span>
         </div>
 
         <div className="scroll-area">
@@ -70,7 +74,11 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
 
                 <p className="desc">{todayStory.summary}</p>
 
-                <button className="primary-btn">
+                <button
+                  type="button"
+                  className="primary-btn"
+                  onClick={() => onComingSoon?.('storyFull')}
+                >
                   오늘 하루 이야기 전체 화면으로 이동 →
                 </button>
               </div>
@@ -84,9 +92,14 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
 
               <div className="reaction-row">
                 {reactions.map((item) => (
-                  <span key={item.id} className={`badge ${item.type}`}>
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`badge ${item.type}`}
+                    onClick={() => onComingSoon?.('reactionStats')}
+                  >
                     {item.label} ({item.count})
-                  </span>
+                  </button>
                 ))}
               </div>
 
@@ -100,7 +113,7 @@ function ParentStoryPage({ isStoryReady = false, onTabChange, onGoHome }) {
                     <div className="comment-bubble">
                       <strong>{item.writer}</strong>
                       <p>{item.message}</p>
-                      <span>25/05/14 20:30</span>
+                      <span>2026/05/16 22:30</span>
                     </div>
                   </div>
                 ))}

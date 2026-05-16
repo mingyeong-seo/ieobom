@@ -1,12 +1,22 @@
-import "./RoleSelectPage.css";
+import { useState } from 'react';
 
-import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
+import './RoleSelectPage.css';
 
-import logoImage from "../../assets/logos/logo.png";
+import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
+
+import logoImage from '../../assets/logos/logo.png';
 
 function RoleSelectPage({ onSelectParent, onSelectGuardian }) {
+  const [roleTime, setRoleTime] = useState('');
+
+  const handleSelect = (callback) => {
+    setTimeout(() => {
+      callback();
+    }, 140);
+  };
+
   return (
-    <PhoneLayout leftStatus="9:41">
+    <PhoneLayout leftStatus={roleTime}>
       <section className="role-page page-enter">
         <img src={logoImage} alt="이어봄 로고" className="role-logo" />
 
@@ -26,7 +36,11 @@ function RoleSelectPage({ onSelectParent, onSelectGuardian }) {
           <button
             type="button"
             className="role-card parent"
-            onClick={onSelectParent}
+            onMouseEnter={() => setRoleTime('21:05')}
+            onMouseLeave={() => setRoleTime('')}
+            onFocus={() => setRoleTime('21:05')}
+            onBlur={() => setRoleTime('')}
+            onClick={() => handleSelect(onSelectParent)}
           >
             <div className="role-emoji">🧑‍🦳</div>
 
@@ -40,11 +54,15 @@ function RoleSelectPage({ onSelectParent, onSelectGuardian }) {
           <button
             type="button"
             className="role-card guardian"
-            onClick={onSelectGuardian}
+            onMouseEnter={() => setRoleTime('6:30')}
+            onMouseLeave={() => setRoleTime('')}
+            onFocus={() => setRoleTime('')}
+            onBlur={() => setRoleTime('')}
+            onClick={() => handleSelect(onSelectGuardian)}
           >
             <div className="role-emoji">👩‍👧‍👦</div>
 
-            <strong>보호자 &#40;자녀 등&#41;</strong>
+            <strong>보호자&#40;자녀 등&#41;</strong>
 
             <p>부모님의 하루 이야기를 확인해요</p>
 
@@ -56,7 +74,11 @@ function RoleSelectPage({ onSelectParent, onSelectGuardian }) {
           원하는 역할을 선택해 이어봄을 체험해보세요.
         </p>
 
-        <p className="role-help">* MVP 체험용 프로토타입 화면입니다.</p>
+        <p className="role-help">
+          * MVP 체험용 프로토타입입니다.
+          <br />
+          일부 이미지는 AI로 제작된 예시 이미지입니다.
+        </p>
       </section>
     </PhoneLayout>
   );

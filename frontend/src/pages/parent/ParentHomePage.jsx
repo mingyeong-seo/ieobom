@@ -1,25 +1,24 @@
-import "./ParentHomePage.css";
+import './ParentHomePage.css';
 
-import BottomTab from "../../components/common/BottomTab/BottomTab";
-import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
-import { chatMessages } from "../../mocks/chats";
-import { parentHome } from "../../mocks/home";
-import { reactionComments } from "../../mocks/reactions";
-import { routineSummary, routines } from "../../mocks/routines";
-import { pendingStory } from "../../mocks/stories";
+import AppHeader from '../../components/common/AppHeader/AppHeader';
+import BottomTab from '../../components/common/BottomTab/BottomTab';
+import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
 
-function ParentHomePage({ onStartChat, onTabChange, isRoutineCompleted }) {
-  const firstQuestion = chatMessages[0];
-  const recentReaction = reactionComments[0];
+import PastTodaySection from '../home/PastTodaySection';
+import RoutineList from '../home/RoutineList';
 
-  const heroTitle = isRoutineCompleted
-    ? "오늘 하루 기록이 완성됐어요"
-    : "오늘 하루가 잘 기록되고 있어요";
+import { parentHome } from '../../mocks/home';
+import { reactionComments as profileReactionComments } from '../../mocks/reactions';
+import { routineSummary, routines } from '../../mocks/routines';
+import { reactionComments as storyReactionComments } from '../../mocks/stories';
 
-  const heroDescription = isRoutineCompleted
-    ? "가족에게 오늘의 이야기가 전달될 준비를 마쳤어요."
-    : "저녁 약만 확인하면 오늘 이야기가 완성돼요.";
-
+function ParentHomePage({
+  onBackToRole,
+  onStartChat,
+  onComingSoon,
+  onTabChange,
+  isRoutineCompleted,
+}) {
   const displaySummary = isRoutineCompleted
     ? {
         completed: routineSummary.total,
@@ -29,81 +28,91 @@ function ParentHomePage({ onStartChat, onTabChange, isRoutineCompleted }) {
 
   const displayRoutines = isRoutineCompleted
     ? routines.map((routine) =>
-        routine.title === "저녁 약"
+        routine.title === '저녁 약'
           ? {
               ...routine,
-              status: "completed",
-              statusText: "완료",
+              status: 'completed',
+              statusText: '완료',
             }
           : routine,
       )
     : routines;
 
+  const displayReactionComments = storyReactionComments.map((comment) => {
+    const profile = profileReactionComments.find((item) => item.id === comment.id);
+
+    return {
+      ...comment,
+      profileImage: profile?.profileImage,
+    };
+  });
+
   return (
-    <PhoneLayout leftStatus="10:41">
+    <PhoneLayout leftStatus="21:05">
       <section className="parent-home page-enter">
-        <header className="parent-home-header">
-          <h1>이어봄</h1>
-          <div className="profile-circle" aria-label="프로필" />
-        </header>
+        <AppHeader
+          className="parent-home-header"
+          logoClassName="parent-home-logo"
+          onLogoClick={onBackToRole}
+        />
 
-        <section className="home-hero">
-          <p className="home-greeting">{heroTitle}</p>
-          <p className="home-date">{parentHome.date}</p>
-          <p className="home-weather">{heroDescription}</p>
-        </section>
+        <main className="parent-home-scroll">
+          <section className="home-hero">
+            <p className="home-greeting">좋은 저녁이에요!</p>
+            <h2>오늘 하루는 어떠셨어요?</h2>
+            <p className="home-date">{parentHome.date}</p>
 
-        <section className="first-question">
-          <p className="section-label">오늘의 첫 질문</p>
-          <div className="question-card">{firstQuestion.text}</div>
-        </section>
-
-        <button
-          type="button"
-          className="chat-start-button"
-          onClick={onStartChat}
-        >
-          대화 시작하기
-        </button>
-
-        <section className="routine-section">
-          <div className="section-header">
-            <h2>오늘 루틴</h2>
-            <span>
-              {displaySummary.completed} / {displaySummary.total} 완료
-            </span>
-          </div>
-
-          <div className="routine-list">
-            {displayRoutines.map((routine) => (
-              <div key={routine.id} className="routine-item">
-                <div className={`routine-icon ${routine.status}`} />
-
-                <div>
-                  <strong>{routine.title}</strong>
-                  <p>{routine.time}</p>
-                </div>
-
-                <span className={`routine-status ${routine.status}`}>
-                  {routine.status === "completed" ? "완료" : "대기"}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {!isRoutineCompleted && (
-          <section className="story-ready-card">
-            <p>{pendingStory.message}</p>
+            <button
+              type="button"
+              className="home-chat-start-button"
+              onClick={onStartChat}
+            >
+              오늘의 대화 시작하기
+            </button>
           </section>
-        )}
 
-        <section className="family-reaction">
-          <p className="section-label">최근 자녀 반응</p>
-          <p>
-            {recentReaction.writer}님이 “{recentReaction.message}”
-          </p>
-        </section>
+          <RoutineList
+            title="오늘의 기록"
+            routines={displayRoutines}
+            summary={`${displaySummary.completed} / ${displaySummary.total} 완료`}
+          />
+
+          <section className="reaction-section">
+            <div className="section-header">
+              <h2>최근 반응</h2>
+              <button
+                type="button"
+                className="more-button"
+                onClick={() => onComingSoon?.('reactionManage')}
+              >
+                더보기 &gt;
+              </button>
+            </div>
+
+            <div className="reaction-card">
+              {displayReactionComments.map((comment) => (
+                <button key={comment.id} type="button" className="reaction-row">
+                  <div className="reaction-avatar">
+                    {comment.profileImage && (
+                      <img src={comment.profileImage} alt={comment.writer} />
+                    )}
+                  </div>
+
+                  <div className="reaction-content">
+                    <p>{comment.message}</p>
+                    <span>{comment.time}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          <PastTodaySection
+            subtitle="지난 기록을 다시 확인해보세요"
+            onMore={() => onComingSoon?.('album')}
+            onItemClick={() => onComingSoon?.('storyFull')}
+          />
+        </main>
 
         <BottomTab currentTab="home" onTabChange={onTabChange} />
       </section>
