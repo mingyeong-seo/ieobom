@@ -1,0 +1,240 @@
+.phone-layout-app {
+  --phone-scale: min(
+    calc((100vw - 24px) / 390),
+    calc((100dvh - 24px) / 844),
+    1
+  );
+
+  width: 100vw;
+  height: 100dvh;
+  min-height: 720px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #4a4a4a;
+  overflow: hidden;
+}
+
+.phone-stage {
+  width: calc(390px * var(--phone-scale));
+  height: calc(844px * var(--phone-scale));
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.phone-frame {
+  position: relative;
+
+  width: 390px;
+  height: 844px;
+
+  padding: 6px;
+
+  border-radius: 32px;
+
+  background: #050505;
+
+  border: 2px solid #1b1b1b;
+
+  box-shadow:
+    0 20px 44px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  transform: scale(var(--phone-scale));
+  transform-origin: center;
+}
+
+.phone-notch {
+  display: none;
+}
+
+.phone-frame::before {
+  content: '';
+
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  z-index: 30;
+
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+
+  background: #050505;
+
+  transform: translateX(-50%);
+}
+
+.phone-screen {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  border-radius: 28px;
+
+  background: var(--color-bg);
+}
+
+.phone-status-bar {
+  position: relative;
+  z-index: 25;
+
+  height: 34px;
+  padding: 8px 18px 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  color: var(--color-text);
+
+  background: #fffaf4;
+}
+
+.phone-status-bar.light,
+.phone-status-bar.guardian-lock,
+.phone-status-bar.parent-lock {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
+}
+
+.phone-status-bar.light .phone-status-icons img,
+.phone-status-bar.guardian-lock .phone-status-icons img,
+.phone-status-bar.parent-lock .phone-status-icons img {
+  filter: brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.24));
+}
+
+.phone-carrier {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.phone-carrier:empty {
+  visibility: hidden;
+}
+
+.phone-status-icons {
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.phone-status-icons img {
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.phone-network-icon {
+  width: 17px;
+  height: 13px;
+}
+
+.phone-wifi-icon {
+  width: 16px;
+  height: 13px;
+}
+
+.phone-battery-icon {
+  width: 25px;
+  height: 14px;
+  transform: none;
+}
+
+.phone-content {
+  position: relative;
+
+  height: calc(100% - 34px);
+
+  overflow: hidden;
+}
+
+.phone-content.full-screen {
+  position: absolute;
+  inset: 0;
+
+  height: 100%;
+}
+
+.phone-home-indicator {
+  display: none;
+}
+
+.android-nav-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 25;
+
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 44px;
+
+  background: #fffaf4;
+  border-top: 1px solid rgba(220, 210, 200, 0.55);
+}
+
+.android-nav-bar span {
+  display: block;
+
+  color: #5f564d;
+
+  font-size: 13px;
+  line-height: 1;
+}
+
+.android-nav-bar.parent-lock {
+  background: transparent;
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.android-nav-bar.parent-lock span {
+  color: rgba(255, 244, 236, 0.9);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.34);
+}
+
+.android-nav-bar.guardian-lock {
+  background: transparent;
+  border-top-color: rgba(255, 255, 255, 0.16);
+}
+
+.android-nav-bar.guardian-lock span {
+  color: rgba(255, 250, 244, 0.92);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 430px), (max-height: 880px) {
+  .phone-layout-app {
+    --phone-scale: min(
+      calc((100vw - 12px) / 390),
+      calc((100dvh - 12px) / 844),
+      1
+    );
+  }
+}
+
+@media (max-height: 760px) {
+  .phone-layout-app {
+    --phone-scale: max(
+      0.72,
+      min(calc((100vw - 8px) / 390), calc((100dvh - 8px) / 844), 1)
+    );
+  }
+}

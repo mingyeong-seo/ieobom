@@ -1,66 +1,242 @@
-import './App.css';
+import { useState } from "react";
 
-import batteryIcon from './assets/icons/battery.png';
-import networkIcon from './assets/icons/network.png';
-import wifiIcon from './assets/icons/wifi.png';
+import ComingSoonPage from "./pages/comingSoon/ComingSoonPage";
+import GuardianHomePage from "./pages/guardian/GuardianHomePage";
+import GuardianSettingsPage from "./pages/guardian/GuardianSettingsPage";
+import GuardianStoryPage from "./pages/guardian/GuardianStoryPage";
+import ParentChatPage from "./pages/parent/ParentChatPage";
+import ParentHomePage from "./pages/parent/ParentHomePage";
+import ParentStoryPage from "./pages/parent/ParentStoryPage";
+import RoleSelectPage from "./pages/role/RoleSelectPage";
+import SplashPage from "./pages/splash/SplashPage";
+import StoryGeneratingPage from "./pages/story/StoryGeneratingPage";
+import { reactions } from "./mocks/stories";
 
-import symbol from './assets/logos/symbol.png';
+if (typeof window !== "undefined") {
+  localStorage.removeItem("ieobom-app-state");
+  sessionStorage.removeItem("ieobom-app-state");
+}
 
 function App() {
-  const currentTime = '2:53';
-  const currentDate = '5월 14일 (목)';
-
-  return (
-    <main className="app">
-      <div className="phone-stage">
-        <section className="phone-frame">
-          <div className="phone-notch" />
-
-          <div className="phone-screen">
-            <header className="status-bar">
-              <span className="carrier">SKT</span>
-
-              <div className="status-icons" aria-label="상태 아이콘">
-                <img
-                  src={networkIcon}
-                  alt="네트워크"
-                  className="network-icon"
-                />
-
-                <img src={wifiIcon} alt="와이파이" className="wifi-icon" />
-
-                <img src={batteryIcon} alt="배터리" className="battery-icon" />
-              </div>
-            </header>
-
-            <section className="lock-screen">
-              <p className="lock-date">{currentDate}</p>
-
-              <h1 className="lock-time">{currentTime}</h1>
-
-              <button type="button" className="notification-card">
-                <div className="notification-icon">
-                  <img src={symbol} alt="이어봄 아이콘" />
-                </div>
-
-                <div className="notification-content">
-                  <strong>이어봄</strong>
-                  <p>약 드실 시간이에요 💊</p>
-                </div>
-              </button>
-
-              <div className="notification-guide">
-                <p>화면의 알림을 누르면 시작돼요!</p>
-                <span aria-hidden="true">⌄</span>
-              </div>
-
-              <div className="home-indicator" />
-            </section>
-          </div>
-        </section>
-      </div>
-    </main>
+  const [page, setPage] = useState("role");
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [isParentStoryReady, setIsParentStoryReady] = useState(false);
+  const [isRoutineCompleted, setIsRoutineCompleted] = useState(false);
+  const [parentReactionCounts, setParentReactionCounts] = useState(() =>
+    reactions.reduce((counts, item) => {
+      counts[item.id] = 0;
+      return counts;
+    }, {}),
   );
+  const [comingSoon, setComingSoon] = useState({
+    feature: "album",
+    returnPage: "parentHome",
+  });
+
+  const handleBackToRole = () => {
+    localStorage.removeItem("ieobom-app-state");
+    sessionStorage.removeItem("ieobom-app-state");
+    setSelectedRole(null);
+    setIsParentStoryReady(false);
+    setIsRoutineCompleted(false);
+    setParentReactionCounts(
+      reactions.reduce((counts, item) => {
+        counts[item.id] = 0;
+        return counts;
+      }, {}),
+    );
+    setComingSoon({
+      feature: "album",
+      returnPage: "parentHome",
+    });
+    setPage("role");
+  };
+
+  const requestBackToRole = () => {
+    const shouldReset = window.confirm(
+      "처음 화면으로 돌아가면 현재 진행 상태가 초기화돼요.\n돌아갈까요?",
+    );
+
+    if (shouldReset) {
+      handleBackToRole();
+    }
+  };
+
+  const handleParentTabChange = (tab) => {
+    if (tab === "home") {
+      setPage("parentHome");
+    }
+
+    if (tab === "chat") {
+      setPage("parentChat");
+    }
+
+    if (tab === "story") {
+      setPage("parentStory");
+    }
+  };
+
+  const handleGuardianTabChange = (tab) => {
+    if (tab === "home") {
+      setPage("guardianHome");
+    }
+
+    if (tab === "story") {
+      setPage("guardianStory");
+    }
+
+    if (tab === "settings") {
+      setPage("guardianSettings");
+    }
+  };
+
+  const getRoleHomePage = () =>
+    selectedRole === "guardian" ? "guardianHome" : "parentHome";
+
+  const getRoleStatusTime = () =>
+    selectedRole === "guardian" ? "6:30" : "9:00";
+
+  const openComingSoon = (feature, returnPage = page) => {
+    setComingSoon({
+      feature,
+      returnPage,
+    });
+    setPage("comingSoon");
+  };
+
+  const handleParentReactionClick = (id) => {
+    setParentReactionCounts((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1,
+    }));
+  };
+
+  if (page === "role") {
+    return (
+      <RoleSelectPage
+        onSelectParent={() => {
+          setSelectedRole("parent");
+          setPage("splash");
+        }}
+        onSelectGuardian={() => {
+          setSelectedRole("guardian");
+          setPage("splash");
+        }}
+      />
+    );
+  }
+
+  if (page === "splash") {
+    return (
+      <SplashPage
+        role={selectedRole}
+        onNext={() => {
+          if (selectedRole === "parent") {
+            setPage("parentHome");
+          }
+
+          if (selectedRole === "guardian") {
+            setPage("guardianHome");
+          }
+        }}
+        onBackToRole={handleBackToRole}
+      />
+    );
+  }
+
+  if (page === "parentHome") {
+    return (
+      <ParentHomePage
+        onStartChat={() => setPage("parentChat")}
+        onBackToRole={requestBackToRole}
+        onComingSoon={(feature) => openComingSoon(feature, "parentHome")}
+        onTabChange={handleParentTabChange}
+        isRoutineCompleted={isRoutineCompleted}
+      />
+    );
+  }
+
+  if (page === "parentChat") {
+    return (
+      <ParentChatPage
+        onBack={() => setPage("parentHome")}
+        onComingSoon={(feature) => openComingSoon(feature, "parentChat")}
+        onCompleteRoutine={() => {
+          setIsRoutineCompleted(true);
+          setIsParentStoryReady(true);
+          setPage("storyGenerating");
+        }}
+      />
+    );
+  }
+
+  if (page === "parentStory") {
+    return (
+      <ParentStoryPage
+        isStoryReady={isParentStoryReady}
+        onBackToRole={requestBackToRole}
+        onComingSoon={(feature) => openComingSoon(feature, "parentStory")}
+        reactionCounts={parentReactionCounts}
+        onReactionClick={handleParentReactionClick}
+        onTabChange={handleParentTabChange}
+      />
+    );
+  }
+
+  if (page === "guardianHome") {
+    return (
+      <GuardianHomePage
+        onBackToRole={requestBackToRole}
+        onGoStory={() => setPage("guardianStory")}
+        onComingSoon={(feature) => openComingSoon(feature, "guardianHome")}
+        onTabChange={handleGuardianTabChange}
+      />
+    );
+  }
+
+  if (page === "guardianStory") {
+    return (
+      <GuardianStoryPage
+        isStoryReady
+        onBackToRole={requestBackToRole}
+        onComingSoon={(feature) => openComingSoon(feature, "guardianStory")}
+        parentReactionCounts={parentReactionCounts}
+        onTabChange={handleGuardianTabChange}
+      />
+    );
+  }
+
+  if (page === "guardianSettings") {
+    return (
+      <GuardianSettingsPage
+        onBackToRole={handleBackToRole}
+        onComingSoon={(feature) => openComingSoon(feature, "guardianSettings")}
+        onTabChange={handleGuardianTabChange}
+      />
+    );
+  }
+
+  if (page === "comingSoon") {
+    return (
+      <ComingSoonPage
+        feature={comingSoon.feature}
+        leftStatus={getRoleStatusTime()}
+        onBack={() => setPage(comingSoon.returnPage)}
+        onHome={() => setPage(getRoleHomePage())}
+      />
+    );
+  }
+
+  if (page === "storyGenerating") {
+    return (
+      <StoryGeneratingPage
+        leftStatus={getRoleStatusTime()}
+        onDone={() => setPage("parentStory")}
+      />
+    );
+  }
+
+  return null;
 }
 
 export default App;

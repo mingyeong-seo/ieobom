@@ -1,0 +1,89 @@
+.story-generating {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #FAF7F2;
+}
+
+/* 중앙 정렬 묶음 */
+.loading-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 바깥 원 */
+.loading-circle {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+/* 물결 원들 */
+.wave {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 122, 61, 0.2);
+    animation: ripple 3s infinite ease-out;
+}
+
+/* 각각 타이밍 다르게 */
+.w1 {
+    animation-delay: 0s;
+}
+
+.w2 {
+    animation-delay: 0.8s;
+}
+
+.w3 {
+    animation-delay: 1.6s;
+}
+
+/* 가운데 원 */
+.inner-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #E8824A;
+    z-index: 1;
+}
+
+/* 텍스트 */
+.loading-wrapper h2 {
+    margin: 2px 0;
+    font-size: 25px;
+    font-weight: 700;
+    color: #2D1F0E;
+    line-height: 1.2;
+}
+
+.loading-wrapper p {
+    margin-top: 12px;
+    font-size: 20px;
+    color: #9A8070;
+}
+
+/* 애니메이션 */
+@keyframes ripple {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.6;
+    }
+
+    70% {
+        transform: scale(2.6);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
