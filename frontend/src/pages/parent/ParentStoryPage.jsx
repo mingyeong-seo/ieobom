@@ -1,19 +1,21 @@
-import BottomTab from '../../components/common/BottomTab/BottomTab';
-import PhoneLayout from '../../components/common/PhoneLayout/PhoneLayout';
+import BottomTab from "../../components/common/BottomTab/BottomTab";
+import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
+import AppHeader from "../../components/common/AppHeader/AppHeader";
+import profileImg from "../../assets/images/grandma-profile.png";
 
-import storyIcon from '../../assets/icons/story.png';
-import photo1 from '../../assets/img/story1.png';
-import photo2 from '../../assets/img/story2.png';
-import photo3 from '../../assets/img/story3.png';
+import storyIcon from "../../assets/icons/story.png";
+import photo1 from "../../assets/img/story1.png";
+import photo2 from "../../assets/img/story2.png";
+import photo3 from "../../assets/img/story3.png";
 
 import {
   pendingStory,
   reactionComments,
   reactions,
   todayStory,
-} from '../../mocks/stories';
+} from "../../mocks/stories";
 
-import './ParentStoryPage.css';
+import "./ParentStoryPage.css";
 
 function ParentStoryPage({
   isStoryReady = false,
@@ -27,7 +29,7 @@ function ParentStoryPage({
       return;
     }
 
-    if (tab === 'home' && onGoHome) {
+    if (tab === "home" && onGoHome) {
       onGoHome();
     }
   };
@@ -35,15 +37,18 @@ function ParentStoryPage({
   return (
     <PhoneLayout>
       <section className="parent-story">
-        <header className="parent-story-header">
-          <h1>기록</h1>
-          <span className="date">5월 17일</span>
-        </header>
+        <AppHeader
+          className="parent-home-header"
+          logoClassName="parent-home-logo"
+          profileImage={profileImg}
+          onLogoClick={onGoHome}
+          onProfileClick={() => onComingSoon?.('profile')}
+        />
 
         <div className="date-nav">
-          <span>{'< 어제'}</span>
+          <span>{"< 어제"}</span>
           <span className="today">오늘 기록</span>
-          <span>{'내일 >'}</span>
+          <span>{"내일 >"}</span>
         </div>
 
         <div className="scroll-area">
@@ -78,7 +83,7 @@ function ParentStoryPage({
               <button
                 type="button"
                 className="empty-action-btn"
-                onClick={() => handleTabChange('chat')}
+                onClick={() => handleTabChange("chat")}
               >
                 대화 시작하기
               </button>
@@ -95,7 +100,7 @@ function ParentStoryPage({
                 <button
                   type="button"
                   className="primary-btn"
-                  onClick={() => onComingSoon?.('storyFull')}
+                  onClick={() => onComingSoon?.("storyFull")}
                 >
                   오늘 하루 이야기 전체 화면으로 이동 →
                 </button>
@@ -109,7 +114,7 @@ function ParentStoryPage({
                 <button
                   type="button"
                   className="photo-item photo-placeholder"
-                  onClick={() => onComingSoon?.('imageSave')}
+                  onClick={() => onComingSoon?.("imageSave")}
                   aria-label="사진 더보기"
                 />
               </div>
@@ -120,9 +125,9 @@ function ParentStoryPage({
                     key={item.id}
                     type="button"
                     className={`badge ${item.type}`}
-                    onClick={() => onComingSoon?.('reactionStats')}
+                    onClick={() => onComingSoon?.("reactionStats")}
                   >
-                    {item.label} ({item.count})
+                    {item.label} <br/> ({item.count})
                   </button>
                 ))}
               </div>

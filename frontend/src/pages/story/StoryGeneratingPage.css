@@ -31,7 +31,6 @@
     height: 100px;
     border-radius: 50%;
     background: rgba(255, 122, 61, 0.2);
-
     animation: ripple 3s infinite ease-out;
 }
 
@@ -60,7 +59,7 @@
 /* 텍스트 */
 .loading-wrapper h2 {
     margin: 2px 0;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: 700;
     color: #2D1F0E;
     line-height: 1.2;
@@ -68,7 +67,7 @@
 
 .loading-wrapper p {
     margin-top: 12px;
-    font-size: 13px;
+    font-size: 20px;
     color: #9A8070;
 }
 

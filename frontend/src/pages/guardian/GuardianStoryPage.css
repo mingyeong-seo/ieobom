@@ -1,34 +1,48 @@
 .guardian-story {
   position: relative;
-
   height: 100%;
-
+  padding: 0;
   background: #fffaf4;
-
   display: flex;
   flex-direction: column;
-
   overflow: hidden;
+}
+
+/* 헤더 */
+.guardian-story .parent-home-header {
+  flex-shrink: 0;
 }
 
 .guardian-story .app-header {
   position: static;
-}
-
-.guardian-story .date-nav {
   flex-shrink: 0;
-
   padding: 0 18px;
 }
 
+/* 날짜 영역 */
+.guardian-story .date-nav {
+  margin-top: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-sub-text);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.guardian-story .date-nav .today {
+  color: var(--color-text);
+  font-weight: 900;
+}
+
+/* 스크롤 */
 .guardian-story .scroll-area {
   flex: 1;
   min-height: 0;
-
-  margin-right: 4px;
-  margin-bottom: 154px;
-  padding: 0 14px 0 18px;
-
+  margin-right: 3px;
+  margin-bottom: 180px;
+  padding: 0 18px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -42,55 +56,199 @@
   border-radius: 10px;
 }
 
+.guardian-story .date-nav,
+.guardian-story .scroll-area {
+  padding: 0 18px;
+}
+
+/* 카드 */
+.guardian-story .story-card {
+  margin-bottom: 20px;
+  padding: 10px 20px 28px;
+  border: 1px solid #efe3da;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(120, 80, 54, 0.08);
+}
+
+.guardian-story .story-card h2 {
+  margin: 0 0 10px;
+  font-size: 23px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.guardian-story .story-card .label {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.guardian-story .story-card .label::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.guardian-story .story-card .desc {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.65;
+  color: var(--color-sub-text);
+}
+
+/* 버튼 */
+.guardian-story .primary-btn {
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: 12px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* 사진 */
+.guardian-story .photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.guardian-story .photo-item {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  border-radius: 14px;
+  background: #ffffff;
+  display: block;
+  object-fit: cover;
+}
+
+.guardian-story .photo-placeholder {
+  background:
+    linear-gradient(135deg, rgba(255, 231, 218, 0.8), rgba(255, 250, 244, 0.9)),
+    #ffffff;
+  cursor: pointer;
+}
+
+/* 반응 버튼 */
+.guardian-story .reaction-row {
+  display: flex;
+  gap: 10px;
+  background: transparent;
+  padding: 0 3px;
+}
+
+.guardian-story .badge {
+  flex: 1;
+  text-align: center;
+  padding: 15px 0;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+}
+
+/* 색상 */
+.guardian-story .badge.love {
+  background: #ffe5d6;
+  color: #ff7a3d;
+}
+
+.guardian-story .badge.miss {
+  background: #fff3cd;
+  color: #a98900;
+}
+
+.guardian-story .badge.call {
+  background: #e4f7e7;
+  color: #2f9e44;
+}
+
+/* 구분선 */
+.guardian-story .family-section {
+  margin-top: 15px;
+  padding-top: 5px;
+  border-top: 1px solid var(--color-border);
+}
+
+.guardian-story .section-title {
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+/* 댓글 */
+.guardian-story .comment-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.guardian-story .avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ffe5d6;
+}
+
+.guardian-story .comment-bubble {
+  max-width: 78%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fee7de;
+}
+
+.guardian-story .comment-bubble strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.guardian-story .comment-bubble p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.guardian-story .comment-bubble span {
+  margin-top: 6px;
+  display: block;
+  font-size: 14px;
+  color: var(--color-sub-text);
+}
+
+/* 보호자 전용 */
 .guardian-story .reaction-input {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 104px;
   z-index: 12;
-
   padding: 10px 16px;
-
   background: #fffaf4;
 }
 
 .guardian-story .reaction-input button {
   width: 100%;
   height: 48px;
-
   border: 1px solid #eadfd5;
   border-radius: 999px;
-
   background: rgba(255, 255, 255, 0.92);
   color: #7a6a5c;
-
-  font: inherit;
   font-size: 16px;
   font-weight: 900;
-
   cursor: pointer;
-}
-
-.empty-guardian {
-  margin-top: 80px;
-
-  color: #9a7b6f;
-
-  text-align: center;
-}
-
-.empty-guardian h2 {
-  margin: 0 0 10px;
-
-  color: var(--color-text);
-
-  font-size: 22px;
-  font-weight: 900;
-}
-
-.empty-guardian p {
-  margin: 4px 0;
-
-  font-size: 16px;
-  font-weight: 600;
 }
