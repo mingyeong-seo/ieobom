@@ -28,6 +28,7 @@ function ParentStoryPage({
   onGoHome,
   story,
   reactionSummary,
+  reactedReactionIds = {},
 }) {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const displayStory = story?.is_ready ? story : todayStory;
@@ -37,6 +38,8 @@ function ParentStoryPage({
     counts[item.type] = item.count;
     return counts;
   }, {});
+  const getReactionCount = (item) =>
+    Math.max(0, (apiReactionCounts?.[item.type] ?? item.count) + (reactionCounts?.[item.id] || 0));
 
   const handleTabChange = (tab) => {
     if (onTabChange) {
@@ -171,13 +174,16 @@ function ParentStoryPage({
                   <button
                     key={item.id}
                     type="button"
-                    className={`badge ${item.type}`}
+                    className={`badge ${item.type} ${
+                      reactedReactionIds[item.id] ? "selected" : ""
+                    }`}
+                    aria-pressed={Boolean(reactedReactionIds[item.id])}
                     onClick={() => onReactionClick?.(item.id)}
                   >
                     {item.label}
-                    {((apiReactionCounts?.[item.type] ?? reactionCounts?.[item.id]) || 0) > 0 && (
+                    {getReactionCount(item) > 0 && (
                       <>
-                        <br />({apiReactionCounts?.[item.type] ?? reactionCounts[item.id]})
+                        <br />({getReactionCount(item)})
                       </>
                     )}
                   </button>

@@ -110,7 +110,11 @@ function ParentChatPage({
 
   const displayMessages =
     hasApiSession
-      ? sessionMessages
+      ? chatStep === 'completed'
+        ? [...sessionMessages, medicineAnswerMessage, nextAiMessage]
+        : chatStep === 'answered'
+          ? [...sessionMessages, medicineAnswerMessage]
+          : sessionMessages
       : chatStep === 'completed'
       ? [...chatMessages, medicineAnswerMessage, nextAiMessage]
       : chatStep === 'answered'

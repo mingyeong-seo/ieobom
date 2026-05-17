@@ -38,6 +38,7 @@ function App() {
   const [reactionSummary, setReactionSummary] = useState(null);
   const [apiError, setApiError] = useState("");
   const [isCompletingRoutine, setIsCompletingRoutine] = useState(false);
+  const [reactedReactionIds, setReactedReactionIds] = useState({});
   const [parentReactionCounts, setParentReactionCounts] = useState(() =>
     reactions.reduce((counts, item) => {
       counts[item.id] = 0;
@@ -126,6 +127,7 @@ function App() {
     setSelectedRole(null);
     setIsParentStoryReady(Boolean(latestStory?.is_ready));
     setIsRoutineCompleted(false);
+    setReactedReactionIds({});
     setParentReactionCounts(
       reactions.reduce((counts, item) => {
         counts[item.id] = 0;
@@ -254,21 +256,25 @@ function App() {
 
   const handleParentReactionClick = async (id) => {
     const reaction = reactions.find((item) => item.id === id);
+    const isCancelling = Boolean(reactedReactionIds[id]);
 
+    setReactedReactionIds((prev) => ({
+      ...prev,
+      [id]: !isCancelling,
+    }));
     setParentReactionCounts((prev) => ({
       ...prev,
-      [id]: (prev[id] || 0) + 1,
+      [id]: Math.max(0, (prev[id] || 0) + (isCancelling ? -1 : 1)),
     }));
 
-    if (!activeToken || !latestStory?.id || !reaction?.type) {
+    if (isCancelling || !activeToken || !latestStory?.id || !reaction?.type) {
       return;
     }
 
     try {
-      const summary = await createStoryReaction(activeToken, latestStory.id, {
+      await createStoryReaction(activeToken, latestStory.id, {
         type: reaction.type,
       });
-      setReactionSummary(summary);
     } catch (error) {
       setApiError(error.message);
     }
@@ -340,6 +346,7 @@ function App() {
         onComingSoon={(feature) => openComingSoon(feature, "parentStory")}
         reactionCounts={parentReactionCounts}
         onReactionClick={handleParentReactionClick}
+        reactedReactionIds={reactedReactionIds}
         onTabChange={handleParentTabChange}
         story={latestStory}
         reactionSummary={reactionSummary}
@@ -366,6 +373,7 @@ function App() {
         onComingSoon={(feature) => openComingSoon(feature, "guardianStory")}
         parentReactionCounts={parentReactionCounts}
         onReactionClick={handleParentReactionClick}
+        reactedReactionIds={reactedReactionIds}
         onTabChange={handleGuardianTabChange}
         story={latestStory}
         reactionSummary={reactionSummary}

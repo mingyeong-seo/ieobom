@@ -23,6 +23,7 @@ function GuardianStoryPage({
   onReactionClick,
   story,
   reactionSummary,
+  reactedReactionIds = {},
 }) {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const displayStory = story?.is_ready ? story : todayStory;
@@ -34,18 +35,14 @@ function GuardianStoryPage({
   const displayComments = reactionSummary?.comments?.length
     ? reactionSummary.comments
     : reactionComments;
-  const [reactionCounts, setReactionCounts] = useState(() =>
-    reactions.reduce((counts, item) => {
-      counts[item.id] = item.count + (parentReactionCounts[item.id] || 0);
-      return counts;
-    }, {}),
-  );
+  const getReactionCount = (item) =>
+    Math.max(
+      0,
+      (apiReactionCounts?.[item.type] ?? item.count) +
+        (parentReactionCounts[item.id] || 0),
+    );
 
   const handleReactionClick = (id) => {
-    setReactionCounts((prev) => ({
-      ...prev,
-      [id]: (prev[id] || 0) + 1,
-    }));
     onReactionClick?.(id);
   };
 
@@ -139,11 +136,13 @@ function GuardianStoryPage({
                   <button
                     key={item.id}
                     type="button"
-                    className={`badge ${item.type}`}
+                    className={`badge ${item.type} ${
+                      reactedReactionIds[item.id] ? "selected" : ""
+                    }`}
+                    aria-pressed={Boolean(reactedReactionIds[item.id])}
                     onClick={() => handleReactionClick(item.id)}
                   >
-                    {item.label} <br />(
-                    {apiReactionCounts?.[item.type] ?? reactionCounts[item.id]})
+                    {item.label} <br />({getReactionCount(item)})
                   </button>
                 ))}
               </div>
