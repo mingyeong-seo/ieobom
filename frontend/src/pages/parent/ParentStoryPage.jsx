@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import BottomTab from "../../components/common/BottomTab/BottomTab";
 import PhoneLayout from "../../components/common/PhoneLayout/PhoneLayout";
 import AppHeader from "../../components/common/AppHeader/AppHeader";
@@ -24,7 +26,18 @@ function ParentStoryPage({
   onReactionClick,
   onTabChange,
   onGoHome,
+  story,
+  reactionSummary,
 }) {
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const displayStory = story?.is_ready ? story : todayStory;
+  const displayPendingStory = story && !story.is_ready ? story : pendingStory;
+  const displayIsStoryReady = Boolean(story?.is_ready ?? isStoryReady);
+  const apiReactionCounts = reactionSummary?.reactions?.reduce((counts, item) => {
+    counts[item.type] = item.count;
+    return counts;
+  }, {});
+
   const handleTabChange = (tab) => {
     if (onTabChange) {
       onTabChange(tab);
@@ -74,14 +87,14 @@ function ParentStoryPage({
         </div>
 
         <div className="scroll-area">
-          {!isStoryReady ? (
+          {!displayIsStoryReady ? (
             <>
               <div className="story-card empty">
                 <p className="label">AI가 정리한 어머니의 하루</p>
 
-                <h2>{pendingStory.title}</h2>
+                <h2>{displayPendingStory.title}</h2>
 
-                <p className="desc">{pendingStory.message}</p>
+                <p className="desc">{displayPendingStory.message}</p>
 
                 <div className="disabled-btn">
                   대화를 마치면 AI가 하루를 요약해 드려요
@@ -115,9 +128,9 @@ function ParentStoryPage({
               <div className="story-card">
                 <p className="label">AI가 정리한 어머니의 하루</p>
 
-                <h2>{todayStory.title}</h2>
+                <h2>{displayStory.title}</h2>
 
-                <p className="desc">{todayStory.summary}</p>
+                <p className="desc">{displayStory.summary}</p>
 
                 <button
                   type="button"
@@ -130,9 +143,20 @@ function ParentStoryPage({
 
               <p className="section-title">오늘의 사진</p>
               <div className="photo-grid">
-                <img src={photo1} className="photo-item" alt="오늘의 사진 1" />
-                <img src={photo2} className="photo-item" alt="오늘의 사진 2" />
-                <img src={photo3} className="photo-item" alt="오늘의 사진 3" />
+                {[
+                  { src: photo1, alt: "오늘의 사진 1" },
+                  { src: photo2, alt: "오늘의 사진 2" },
+                  { src: photo3, alt: "오늘의 사진 3" },
+                ].map((photo) => (
+                  <button
+                    key={photo.src}
+                    type="button"
+                    className="photo-item photo-image-button"
+                    onClick={() => setSelectedPhoto(photo)}
+                  >
+                    <img src={photo.src} alt={photo.alt} />
+                  </button>
+                ))}
                 <button
                   type="button"
                   className="photo-item photo-placeholder"
@@ -151,9 +175,9 @@ function ParentStoryPage({
                     onClick={() => onReactionClick?.(item.id)}
                   >
                     {item.label}
-                    {(reactionCounts?.[item.id] || 0) > 0 && (
+                    {((apiReactionCounts?.[item.type] ?? reactionCounts?.[item.id]) || 0) > 0 && (
                       <>
-                        <br />({reactionCounts[item.id]})
+                        <br />({apiReactionCounts?.[item.type] ?? reactionCounts[item.id]})
                       </>
                     )}
                   </button>
@@ -176,6 +200,26 @@ function ParentStoryPage({
             </>
           )}
         </div>
+
+        {selectedPhoto && (
+          <div
+            className="photo-viewer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="사진 크게 보기"
+            onClick={() => setSelectedPhoto(null)}
+          >
+            <button
+              type="button"
+              className="photo-viewer-close"
+              onClick={() => setSelectedPhoto(null)}
+              aria-label="닫기"
+            >
+              ×
+            </button>
+            <img src={selectedPhoto.src} alt={selectedPhoto.alt} />
+          </div>
+        )}
 
         <BottomTab currentTab="story" onTabChange={handleTabChange} />
       </section>

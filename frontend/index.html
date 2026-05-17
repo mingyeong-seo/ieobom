@@ -2,9 +2,32 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>이어봄</title>
     <link rel="icon" href="/symbol.ico" />
+    <script>
+      (() => {
+        const shouldHide = (args) =>
+          typeof args[0] === 'string' &&
+          /^\[vite\] (connecting|connected)\.?$/.test(args[0]);
+        const originalLog = console.log.bind(console);
+        const originalInfo = console.info.bind(console);
+        const originalDebug = console.debug.bind(console);
+
+        console.log = (...args) => {
+          if (!shouldHide(args)) originalLog(...args);
+        };
+        console.info = (...args) => {
+          if (!shouldHide(args)) originalInfo(...args);
+        };
+        console.debug = (...args) => {
+          if (!shouldHide(args)) originalDebug(...args);
+        };
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ComingSoonPage from "./pages/comingSoon/ComingSoonPage";
 import GuardianHomePage from "./pages/guardian/GuardianHomePage";
@@ -10,6 +10,16 @@ import ParentStoryPage from "./pages/parent/ParentStoryPage";
 import RoleSelectPage from "./pages/role/RoleSelectPage";
 import SplashPage from "./pages/splash/SplashPage";
 import StoryGeneratingPage from "./pages/story/StoryGeneratingPage";
+import {
+  bootstrapDemo,
+  createStoryReaction,
+  generateStory,
+  getLatestStory,
+  getStoryReactions,
+  getTodaySession,
+  sendConversationMessage,
+} from "./api/ieobomApi";
+import { medicineAnswerMessage } from "./mocks/chats";
 import { reactions } from "./mocks/stories";
 
 if (typeof window !== "undefined") {
@@ -22,6 +32,12 @@ function App() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [isParentStoryReady, setIsParentStoryReady] = useState(false);
   const [isRoutineCompleted, setIsRoutineCompleted] = useState(false);
+  const [demoData, setDemoData] = useState(null);
+  const [todaySession, setTodaySession] = useState(null);
+  const [latestStory, setLatestStory] = useState(null);
+  const [reactionSummary, setReactionSummary] = useState(null);
+  const [apiError, setApiError] = useState("");
+  const [isCompletingRoutine, setIsCompletingRoutine] = useState(false);
   const [parentReactionCounts, setParentReactionCounts] = useState(() =>
     reactions.reduce((counts, item) => {
       counts[item.id] = 0;
@@ -33,11 +49,82 @@ function App() {
     returnPage: "parentHome",
   });
 
+  const parentToken = demoData?.parent_token;
+  const guardianToken = demoData?.guardian_token;
+  const activeToken = selectedRole === "guardian" ? guardianToken : parentToken;
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function initializeDemo() {
+      try {
+        const bootstrap = await bootstrapDemo();
+
+        if (ignore) {
+          return;
+        }
+
+        setDemoData(bootstrap);
+        setLatestStory(bootstrap.latest_story);
+        setIsParentStoryReady(Boolean(bootstrap.latest_story?.is_ready));
+
+        const session = await getTodaySession(bootstrap.parent_token);
+
+        if (ignore) {
+          return;
+        }
+
+        setTodaySession(session);
+        setIsRoutineCompleted(
+          ["completed", "story_created"].includes(session.status),
+        );
+      } catch (error) {
+        if (!ignore) {
+          setApiError(error.message);
+        }
+      }
+    }
+
+    initializeDemo();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!activeToken || !latestStory?.id) {
+      return;
+    }
+
+    let ignore = false;
+
+    async function loadReactions() {
+      try {
+        const summary = await getStoryReactions(activeToken, latestStory.id);
+
+        if (!ignore) {
+          setReactionSummary(summary);
+        }
+      } catch (error) {
+        if (!ignore) {
+          setApiError(error.message);
+        }
+      }
+    }
+
+    loadReactions();
+
+    return () => {
+      ignore = true;
+    };
+  }, [activeToken, latestStory?.id]);
+
   const handleBackToRole = () => {
     localStorage.removeItem("ieobom-app-state");
     sessionStorage.removeItem("ieobom-app-state");
     setSelectedRole(null);
-    setIsParentStoryReady(false);
+    setIsParentStoryReady(Boolean(latestStory?.is_ready));
     setIsRoutineCompleted(false);
     setParentReactionCounts(
       reactions.reduce((counts, item) => {
@@ -104,11 +191,87 @@ function App() {
     setPage("comingSoon");
   };
 
-  const handleParentReactionClick = (id) => {
+  const handleCompleteRoutine = async () => {
+    if (!parentToken || !todaySession?.id) {
+      setIsRoutineCompleted(true);
+      setIsParentStoryReady(true);
+      setPage("storyGenerating");
+      return;
+    }
+
+    setIsCompletingRoutine(true);
+    setApiError("");
+
+    try {
+      const parentReplyCount = todaySession.messages.filter(
+        (message) => message.sender === "parent",
+      ).length;
+      const cannedReplies = [
+        "밥 맛있게 먹었어.",
+        "산책도 하고 기분이 좋았어.",
+        medicineAnswerMessage.text,
+      ].slice(parentReplyCount);
+
+      let sessionStatus = todaySession.status;
+      let shouldGenerateStory = false;
+
+      for (const text of cannedReplies) {
+        const reply = await sendConversationMessage(parentToken, todaySession.id, {
+          text,
+          response_type: "text",
+        });
+
+        sessionStatus = reply.session_status;
+        shouldGenerateStory = reply.should_generate_story;
+      }
+
+      const refreshedSession = await getTodaySession(parentToken);
+      setTodaySession(refreshedSession);
+      setIsRoutineCompleted(
+        ["completed", "story_created"].includes(sessionStatus),
+      );
+
+      if (shouldGenerateStory || sessionStatus === "completed") {
+        const story = await generateStory(parentToken, todaySession.id);
+        setLatestStory(story);
+        setIsParentStoryReady(Boolean(story.is_ready));
+      } else {
+        const story = await getLatestStory(parentToken);
+        setLatestStory(story);
+        setIsParentStoryReady(Boolean(story.is_ready));
+      }
+
+      setPage("storyGenerating");
+    } catch (error) {
+      setApiError(error.message);
+      setIsRoutineCompleted(true);
+      setIsParentStoryReady(true);
+      setPage("storyGenerating");
+    } finally {
+      setIsCompletingRoutine(false);
+    }
+  };
+
+  const handleParentReactionClick = async (id) => {
+    const reaction = reactions.find((item) => item.id === id);
+
     setParentReactionCounts((prev) => ({
       ...prev,
       [id]: (prev[id] || 0) + 1,
     }));
+
+    if (!activeToken || !latestStory?.id || !reaction?.type) {
+      return;
+    }
+
+    try {
+      const summary = await createStoryReaction(activeToken, latestStory.id, {
+        type: reaction.type,
+      });
+      setReactionSummary(summary);
+    } catch (error) {
+      setApiError(error.message);
+    }
   };
 
   if (page === "role") {
@@ -161,11 +324,10 @@ function App() {
       <ParentChatPage
         onBack={() => setPage("parentHome")}
         onComingSoon={(feature) => openComingSoon(feature, "parentChat")}
-        onCompleteRoutine={() => {
-          setIsRoutineCompleted(true);
-          setIsParentStoryReady(true);
-          setPage("storyGenerating");
-        }}
+        onCompleteRoutine={handleCompleteRoutine}
+        session={todaySession}
+        apiError={apiError}
+        isCompleting={isCompletingRoutine}
       />
     );
   }
@@ -179,6 +341,8 @@ function App() {
         reactionCounts={parentReactionCounts}
         onReactionClick={handleParentReactionClick}
         onTabChange={handleParentTabChange}
+        story={latestStory}
+        reactionSummary={reactionSummary}
       />
     );
   }
@@ -201,7 +365,10 @@ function App() {
         onBackToRole={requestBackToRole}
         onComingSoon={(feature) => openComingSoon(feature, "guardianStory")}
         parentReactionCounts={parentReactionCounts}
+        onReactionClick={handleParentReactionClick}
         onTabChange={handleGuardianTabChange}
+        story={latestStory}
+        reactionSummary={reactionSummary}
       />
     );
   }

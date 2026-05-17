@@ -1,13 +1,22 @@
 .phone-layout-app {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
   --phone-scale: min(
-    calc((100vw - 24px) / 390),
-    calc((100dvh - 24px) / 844),
+    calc((100vw - 24px - var(--safe-left) - var(--safe-right)) / 390),
+    calc((100svh - 24px - var(--safe-top) - var(--safe-bottom)) / 844),
     1
   );
 
   width: 100vw;
-  height: 100dvh;
-  min-height: 720px;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding:
+    calc(8px + var(--safe-top))
+    calc(8px + var(--safe-right))
+    calc(8px + var(--safe-bottom))
+    calc(8px + var(--safe-left));
 
   display: flex;
   justify-content: center;
@@ -15,6 +24,10 @@
 
   background: #4a4a4a;
   overflow: hidden;
+}
+
+.orientation-blocker {
+  display: none;
 }
 
 .phone-stage {
@@ -223,8 +236,8 @@
 @media (max-width: 430px), (max-height: 880px) {
   .phone-layout-app {
     --phone-scale: min(
-      calc((100vw - 12px) / 390),
-      calc((100dvh - 12px) / 844),
+      calc((100vw - 10px - var(--safe-left) - var(--safe-right)) / 390),
+      calc((100svh - 10px - var(--safe-top) - var(--safe-bottom)) / 844),
       1
     );
   }
@@ -232,9 +245,51 @@
 
 @media (max-height: 760px) {
   .phone-layout-app {
-    --phone-scale: max(
-      0.72,
-      min(calc((100vw - 8px) / 390), calc((100dvh - 8px) / 844), 1)
+    --phone-scale: min(
+      calc((100vw - 8px - var(--safe-left) - var(--safe-right)) / 390),
+      calc((100svh - 8px - var(--safe-top) - var(--safe-bottom)) / 844),
+      1
     );
+  }
+}
+
+@media (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
+  .phone-layout-app {
+    padding: 24px;
+    background: #fffaf4;
+  }
+
+  .phone-stage {
+    display: none;
+  }
+
+  .orientation-blocker {
+    width: min(420px, 100%);
+    min-height: 180px;
+    padding: 28px 24px;
+    border: 1px solid #efe3da;
+    border-radius: 20px;
+    background: #ffffff;
+    color: #29211c;
+    box-shadow: 0 18px 44px rgba(45, 31, 24, 0.16);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .orientation-blocker strong {
+    font-size: 22px;
+    font-weight: 900;
+  }
+
+  .orientation-blocker span {
+    color: #7a6a5c;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.45;
   }
 }
