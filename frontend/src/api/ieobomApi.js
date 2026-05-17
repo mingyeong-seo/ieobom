@@ -57,6 +57,35 @@ export function generateStory(token, sessionId, forceRegenerate = false) {
   });
 }
 
+export async function generateStoryWithVercel(payload = {}) {
+  const response = await fetch('/api/generate-story', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error('AI story generation failed.');
+  }
+
+  const story = await response.json();
+
+  return {
+    id: story.id ?? Date.now(),
+    date: story.date ?? '2026-05-17',
+    story_date: story.story_date ?? story.date ?? '2026-05-17',
+    title: story.title ?? '오늘 하루 · 5월 17일',
+    summary: story.summary,
+    keywords: story.keywords ?? [],
+    ai_suggestion: story.ai_suggestion,
+    image_url: story.image_url ?? null,
+    is_ready: true,
+    source: story.source,
+  };
+}
+
 export function getLatestStory(token) {
   return request('/stories/latest', { token });
 }

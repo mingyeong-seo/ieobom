@@ -14,6 +14,7 @@ import {
   bootstrapDemo,
   createStoryReaction,
   generateStory,
+  generateStoryWithVercel,
   getLatestStory,
   getStoryReactions,
   getTodaySession,
@@ -193,8 +194,40 @@ function App() {
     setPage("comingSoon");
   };
 
+  const buildStoryGenerationPayload = (session = todaySession) => ({
+    messages:
+      session?.messages?.map((message) => ({
+        sender: message.sender,
+        text: message.text,
+      })) ?? [
+        { sender: "ai", text: "점심 드셨어요?" },
+        { sender: "parent", text: "응, 전에 담근 김치랑 같이 먹었어." },
+        { sender: "ai", text: "오늘 산책은 다녀오셨어요?" },
+        { sender: "parent", text: "응, 동네 한 바퀴 돌고 왔어." },
+        { sender: "ai", text: "저녁 약도 챙겨 드셨어요?" },
+        { sender: "parent", text: medicineAnswerMessage.text },
+      ],
+    routines:
+      session?.routines?.map((routine) => ({
+        title: routine.title,
+        status: routine.status,
+        scheduled_time: routine.scheduled_time,
+      })) ?? [
+        { title: "점심", status: "completed" },
+        { title: "산책", status: "completed" },
+        { title: "저녁 약", status: "completed" },
+      ],
+  });
+
   const handleCompleteRoutine = async () => {
     if (!parentToken || !todaySession?.id) {
+      try {
+        const story = await generateStoryWithVercel(buildStoryGenerationPayload());
+        setLatestStory(story);
+      } catch {
+        // Keep the existing mock story flow if the Vercel function is unavailable.
+      }
+
       setIsRoutineCompleted(true);
       setIsParentStoryReady(true);
       setPage("storyGenerating");
@@ -234,7 +267,16 @@ function App() {
       );
 
       if (shouldGenerateStory || sessionStatus === "completed") {
-        const story = await generateStory(parentToken, todaySession.id);
+        let story;
+
+        try {
+          story = await generateStory(parentToken, todaySession.id);
+        } catch {
+          story = await generateStoryWithVercel(
+            buildStoryGenerationPayload(refreshedSession),
+          );
+        }
+
         setLatestStory(story);
         setIsParentStoryReady(Boolean(story.is_ready));
       } else {
