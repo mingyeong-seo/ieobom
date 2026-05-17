@@ -228,6 +228,11 @@ cursor: pointer;
   cursor: pointer;
 }
 
+.parent-story .badge.selected {
+  opacity: 1;
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
 /* 색상 */
 .parent-story .badge.love {
   background: #ffe5d6;
