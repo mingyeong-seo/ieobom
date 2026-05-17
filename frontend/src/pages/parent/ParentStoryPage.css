@@ -144,13 +144,26 @@
 }
 
 .parent-story .photo-item {
-width: 100%;
-aspect-ratio: 1 / 1;
-border: 0;
-border-radius: 14px;
-background: #ffffff;
-display: block;
-object-fit: cover;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  border-radius: 14px;
+  background: #ffffff;
+  display: block;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.parent-story .photo-image-button {
+  padding: 0;
+  cursor: zoom-in;
+}
+
+.parent-story .photo-image-button img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .parent-story .photo-placeholder {
@@ -158,6 +171,41 @@ background:
 linear-gradient(135deg, rgba(255, 231, 218, 0.8), rgba(255, 250, 244, 0.9)),
 #ffffff;
 cursor: pointer;
+}
+
+.parent-story .photo-viewer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  padding: 26px 18px;
+  background: rgba(24, 18, 14, 0.86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.parent-story .photo-viewer img {
+  max-width: 100%;
+  max-height: 78%;
+  border-radius: 18px;
+  object-fit: contain;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
+}
+
+.parent-story .photo-viewer-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  color: #29211c;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
 }
 
 /* 반응 버튼 */

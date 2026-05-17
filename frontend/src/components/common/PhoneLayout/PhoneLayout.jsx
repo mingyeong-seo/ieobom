@@ -14,6 +14,11 @@ function PhoneLayout({
 }) {
   return (
     <main className="phone-layout-app">
+      <div className="orientation-blocker" role="status">
+        <strong>세로 화면으로 이용해주세요</strong>
+        <span>이어봄은 휴대폰 세로 화면에 맞춰져 있어요.</span>
+      </div>
+
       <div className="phone-stage">
         <section className="phone-frame">
           <div className="phone-screen">
