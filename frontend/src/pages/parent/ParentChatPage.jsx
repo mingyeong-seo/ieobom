@@ -40,16 +40,63 @@ const routineSteps = [
   },
 ];
 
-function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
+function formatMessageTime(value) {
+  if (!value) {
+    return '21:00 PM';
+  }
+
+  return new Intl.DateTimeFormat('ko-KR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(value));
+}
+
+function normalizeMessage(message) {
+  return {
+    id: message.id,
+    sender: message.sender,
+    text: message.text,
+    time: formatMessageTime(message.created_at),
+  };
+}
+
+function normalizeRoutine(routine) {
+  const isDone = routine.status === 'completed';
+
+  return {
+    id: routine.id,
+    title: routine.title,
+    statusText: isDone ? '?꾨즺' : '?湲?',
+    colorClass: isDone ? 'green' : 'pink',
+    statusClass: isDone ? 'done' : 'pending',
+  };
+}
+
+function ParentChatPage({
+  onBack,
+  onComingSoon,
+  onCompleteRoutine,
+  session,
+  apiError,
+  isCompleting = false,
+}) {
   const [chatStep, setChatStep] = useState('waiting');
   const [showVoiceGuide, setShowVoiceGuide] = useState(false);
   const [toastKey, setToastKey] = useState(0);
 
   const chatBodyRef = useRef(null);
   const guideTimerRef = useRef(null);
+  const hasApiSession = Boolean(session?.messages?.length);
+  const sessionIsComplete = ['completed', 'story_created'].includes(session?.status);
+  const sessionMessages = hasApiSession
+    ? session.messages.map(normalizeMessage)
+    : chatMessages;
 
   const displayRoutines =
-    chatStep === 'completed'
+    hasApiSession
+      ? session.routines.map(normalizeRoutine)
+      : chatStep === 'completed'
       ? routineSteps.map((routine) =>
           routine.id === 4
             ? {
@@ -62,14 +109,16 @@ function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
       : routineSteps;
 
   const displayMessages =
-    chatStep === 'completed'
+    hasApiSession
+      ? sessionMessages
+      : chatStep === 'completed'
       ? [...chatMessages, medicineAnswerMessage, nextAiMessage]
       : chatStep === 'answered'
         ? [...chatMessages, medicineAnswerMessage]
         : chatMessages;
 
   const handleVoiceInput = () => {
-    if (chatStep !== 'waiting') {
+    if (chatStep !== 'waiting' || isCompleting || sessionIsComplete) {
       return;
     }
 
@@ -211,6 +260,12 @@ function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
             </div>
           )}
 
+          {apiError && (
+            <div className="voice-guide-toast" role="status">
+              API 연결에 실패해 임시 화면으로 진행합니다.
+            </div>
+          )}
+
           <div className="quick-action-grid">
             <button
               type="button"
@@ -234,7 +289,7 @@ function ParentChatPage({ onBack, onComingSoon, onCompleteRoutine }) {
           <button
             type="button"
             className="voice-input-button"
-            disabled={chatStep !== 'waiting'}
+            disabled={chatStep !== 'waiting' || isCompleting || sessionIsComplete}
             onClick={handleVoiceInput}
           >
             <span className="voice-ring" aria-hidden="true" />

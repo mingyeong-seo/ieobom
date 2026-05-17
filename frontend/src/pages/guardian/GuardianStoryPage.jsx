@@ -20,7 +20,20 @@ function GuardianStoryPage({
   onComingSoon,
   parentReactionCounts = {},
   onTabChange,
+  onReactionClick,
+  story,
+  reactionSummary,
 }) {
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const displayStory = story?.is_ready ? story : todayStory;
+  const displayIsStoryReady = Boolean(story?.is_ready ?? isStoryReady);
+  const apiReactionCounts = reactionSummary?.reactions?.reduce((counts, item) => {
+    counts[item.type] = item.count;
+    return counts;
+  }, {});
+  const displayComments = reactionSummary?.comments?.length
+    ? reactionSummary.comments
+    : reactionComments;
   const [reactionCounts, setReactionCounts] = useState(() =>
     reactions.reduce((counts, item) => {
       counts[item.id] = item.count + (parentReactionCounts[item.id] || 0);
@@ -33,6 +46,7 @@ function GuardianStoryPage({
       ...prev,
       [id]: (prev[id] || 0) + 1,
     }));
+    onReactionClick?.(id);
   };
 
   const handleDateMoveClick = (event) => {
@@ -72,7 +86,7 @@ function GuardianStoryPage({
         </div>
 
         <div className="scroll-area">
-          {!isStoryReady ? (
+          {!displayIsStoryReady ? (
             <div className="empty-guardian">
               <h2>오늘 하루의 이야기가 없어요</h2>
               <p>아직 오늘의 기록이 생성되지 않았어요</p>
@@ -83,9 +97,9 @@ function GuardianStoryPage({
               <div className="story-card">
                 <p className="label">AI가 정리한 김옥자 님의 하루</p>
 
-                <h2>{todayStory.title}</h2>
+                <h2>{displayStory.title}</h2>
 
-                <p className="desc">{todayStory.summary}</p>
+                <p className="desc">{displayStory.summary}</p>
 
                 <button
                   type="button"
@@ -98,9 +112,20 @@ function GuardianStoryPage({
 
               <p className="section-title">오늘의 사진</p>
               <div className="photo-grid">
-                <img src={photo1} className="photo-item" alt="오늘의 사진 1" />
-                <img src={photo2} className="photo-item" alt="오늘의 사진 2" />
-                <img src={photo3} className="photo-item" alt="오늘의 사진 3" />
+                {[
+                  { src: photo1, alt: "오늘의 사진 1" },
+                  { src: photo2, alt: "오늘의 사진 2" },
+                  { src: photo3, alt: "오늘의 사진 3" },
+                ].map((photo) => (
+                  <button
+                    key={photo.src}
+                    type="button"
+                    className="photo-item photo-image-button"
+                    onClick={() => setSelectedPhoto(photo)}
+                  >
+                    <img src={photo.src} alt={photo.alt} />
+                  </button>
+                ))}
                 <button
                   type="button"
                   className="photo-item photo-placeholder"
@@ -117,7 +142,8 @@ function GuardianStoryPage({
                     className={`badge ${item.type}`}
                     onClick={() => handleReactionClick(item.id)}
                   >
-                    {item.label} <br />({reactionCounts[item.id]})
+                    {item.label} <br />(
+                    {apiReactionCounts?.[item.type] ?? reactionCounts[item.id]})
                   </button>
                 ))}
               </div>
@@ -125,7 +151,7 @@ function GuardianStoryPage({
               <div className="family-section">
                 <p className="section-title">가족 반응</p>
 
-                {reactionComments.map((item) => (
+                {displayComments.map((item) => (
                   <div key={item.id} className="comment-item">
                     <div className="avatar">
                       {item.profileImage && (
@@ -135,7 +161,14 @@ function GuardianStoryPage({
                     <div className="comment-bubble">
                       <strong>{item.writer}</strong>
                       <p>{item.message}</p>
-                      <span>{item.time}</span>
+                      <span>
+                        {typeof item.time === "string"
+                          ? item.time
+                          : new Intl.DateTimeFormat("ko-KR", {
+                              dateStyle: "short",
+                              timeStyle: "short",
+                            }).format(new Date(item.time))}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -144,8 +177,28 @@ function GuardianStoryPage({
           )}
         </div>
 
+        {selectedPhoto && (
+          <div
+            className="photo-viewer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="사진 크게 보기"
+            onClick={() => setSelectedPhoto(null)}
+          >
+            <button
+              type="button"
+              className="photo-viewer-close"
+              onClick={() => setSelectedPhoto(null)}
+              aria-label="닫기"
+            >
+              ×
+            </button>
+            <img src={selectedPhoto.src} alt={selectedPhoto.alt} />
+          </div>
+        )}
+
         {/* ✅ 보호자 전용 */}
-        {isStoryReady && (
+        {displayIsStoryReady && (
           <div className="reaction-input">
             <button type="button" onClick={() => onComingSoon?.("reactionAdd")}>
               오늘 하루 안부 남기기...
