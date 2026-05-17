@@ -82,7 +82,7 @@ function App() {
         );
       } catch (error) {
         if (!ignore) {
-          setApiError(error.message);
+          console.warn("Backend demo API unavailable; continuing with local demo.", error);
         }
       }
     }
@@ -110,7 +110,7 @@ function App() {
         }
       } catch (error) {
         if (!ignore) {
-          setApiError(error.message);
+          console.warn("Story reactions API unavailable; continuing with local demo.", error);
         }
       }
     }
