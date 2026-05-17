@@ -33,6 +33,9 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
+프론트를 로컬에서 API에 연결해 실행할 때는 이 백엔드 서버가 `http://localhost:8000`에서 켜져 있어야 합니다.
+서버가 꺼져 있으면 프론트의 `/api/v1/demo/bootstrap` 요청이 `ERR_CONNECTION_REFUSED`로 실패합니다.
+
 API 문서:
 
 ```text

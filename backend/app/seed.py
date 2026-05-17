@@ -8,8 +8,10 @@ from app.core.security import create_access_token, hash_password
 from app.core.timezone import today_kst
 from app.models import (
     CheckinSession,
+    ConversationMessage,
     Family,
     FamilyMember,
+    MessageSender,
     Reaction,
     SessionStatus,
     Story,
@@ -17,7 +19,7 @@ from app.models import (
     UserRole,
 )
 from app.services.ai_story import FALLBACK_KEYWORDS, FALLBACK_SUMMARY
-from app.services.checkin_service import create_or_get_today_session
+from app.services.checkin_service import AI_QUESTIONS, create_or_get_today_session
 from app.utils import REACTION_PRESETS, encode_keywords
 
 
@@ -42,7 +44,8 @@ def seed_demo_data(db: Session) -> None:
     family = _get_or_create_family(db, parent, guardian)
 
     story_date = today_kst() - timedelta(days=1)
-    create_or_get_today_session(db, parent=parent, family=family)
+    today_session = create_or_get_today_session(db, parent=parent, family=family)
+    _ensure_today_demo_history(db, today_session)
     story_session = create_or_get_today_session(
         db,
         parent=parent,
@@ -138,6 +141,49 @@ def _ensure_story(
     db.add(story)
     db.flush()
     return story
+
+
+def _ensure_today_demo_history(db: Session, session: CheckinSession) -> None:
+    if len(session.messages) > 1:
+        return
+
+    demo_messages = [
+        (
+            MessageSender.parent,
+            "응, 전에 담근 김치랑 같이 먹어서 더 맛있었어.",
+            "text",
+            2,
+        ),
+        (
+            MessageSender.ai,
+            AI_QUESTIONS[1],
+            "system",
+            3,
+        ),
+        (
+            MessageSender.parent,
+            "응, 날씨가 좋아서 동네 한 바퀴 돌고 왔어.",
+            "text",
+            4,
+        ),
+        (
+            MessageSender.ai,
+            AI_QUESTIONS[2],
+            "system",
+            5,
+        ),
+    ]
+    for sender, text, response_type, order_index in demo_messages:
+        db.add(
+            ConversationMessage(
+                session_id=session.id,
+                sender=sender,
+                text=text,
+                response_type=response_type,
+                order_index=order_index,
+            )
+        )
+    db.flush()
 
 
 def _ensure_reactions(db: Session, guardian: User) -> None:

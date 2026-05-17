@@ -37,11 +37,16 @@ def test_demo_flow():
         assert data["parent"]["role"] == "parent"
         assert data["guardian"]["role"] == "guardian"
 
-        session_response = client.get(
-            "/api/v1/checkin/sessions/today",
+        session_response = client.post(
+            "/api/v1/checkin/sessions",
+            json={
+                "parent_id": data["parent"]["id"],
+                "family_id": data["family"]["id"],
+                "session_date": "2099-01-10",
+            },
             headers=_auth(data["parent_token"]),
         )
-        assert session_response.status_code == 200
+        assert session_response.status_code == 201
         session_id = session_response.json()["id"]
 
         reply = client.post(
@@ -51,6 +56,35 @@ def test_demo_flow():
         )
         assert reply.status_code == 200
         assert reply.json()["ai_message"]["sender"] == "ai"
+
+
+def test_demo_today_session_is_preloaded_for_final_reply():
+    from fastapi.testclient import TestClient
+
+    with TestClient(app) as client:
+        data = _bootstrap(client)
+        session_response = client.get(
+            "/api/v1/checkin/sessions/today",
+            headers=_auth(data["parent_token"]),
+        )
+        assert session_response.status_code == 200
+        session = session_response.json()
+        assert [message["sender"] for message in session["messages"]] == [
+            "ai",
+            "parent",
+            "ai",
+            "parent",
+            "ai",
+        ]
+
+        reply = client.post(
+            f"/api/v1/conversation/sessions/{session['id']}/messages",
+            json={"text": "응, 방금 물이랑 같이 먹었어.", "response_type": "text"},
+            headers=_auth(data["parent_token"]),
+        )
+        assert reply.status_code == 200
+        assert reply.json()["should_generate_story"] is True
+        assert reply.json()["session_status"] == "completed"
 
 
 def test_completed_session_rejects_more_messages():
