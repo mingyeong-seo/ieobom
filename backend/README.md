@@ -98,6 +98,7 @@ curl -X POST http://localhost:8000/api/v1/conversation/sessions/1/messages \
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/stories/sessions/1/generate \
+  -H "Authorization: Bearer <parent_token>" \
   -H "Content-Type: application/json" \
   -d '{"force_regenerate":false}'
 ```
@@ -139,3 +140,9 @@ OPENAI_MODEL=gpt-5.1-mini
 DEMO_MODE=false
 SEED_DEMO_DATA=false
 ```
+
+## AI 생성 동작
+
+`OPENAI_API_KEY`가 비어 있으면 발표 데모가 끊기지 않도록 고정 fallback 문구로 하루 이야기를 생성합니다.
+실제 AI 응답 품질을 확인하려면 `backend/.env`에 API key를 넣고 서버를 재시작하세요.
+API key가 잘못되었거나 OpenAI 호출이 실패해도 MVP 흐름은 fallback으로 유지됩니다.

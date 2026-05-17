@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.core.timezone import today_kst
 from app.db.session import get_db
-from app.deps import get_current_user
+from app.deps import ensure_family_access, get_current_user
 from app.models import CheckinSession, SessionStatus, Story, User
 from app.schemas import PendingStoryRead, StoryGenerateRequest, StoryRead
 from app.services.ai_story import generate_story_summary
@@ -23,10 +23,12 @@ def generate_story(
     session_id: int,
     payload: StoryGenerateRequest,
     db: Annotated[Session, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
 ):
     session = db.get(CheckinSession, session_id)
     if not session:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found.")
+    ensure_family_access(user, session.family_id)
 
     existing = db.query(Story).filter(Story.session_id == session.id).first()
     if existing and not payload.force_regenerate:
@@ -93,8 +95,13 @@ def read_recent_stories(
 
 
 @router.get("/{story_id}", response_model=StoryRead)
-def read_story(story_id: int, db: Annotated[Session, Depends(get_db)]):
+def read_story(
+    story_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+):
     story = db.get(Story, story_id)
     if not story:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Story not found.")
+    ensure_family_access(user, story.family_id)
     return story_to_read(story)

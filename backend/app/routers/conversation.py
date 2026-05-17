@@ -6,7 +6,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.models import CheckinSession
+from app.deps import ensure_family_access, get_current_user
+from app.models import CheckinSession, SessionStatus, User
 from app.schemas import (
     ConversationMessageRead,
     ConversationReplyRequest,
@@ -19,8 +20,13 @@ router = APIRouter(prefix="/conversation", tags=["conversation"])
 
 
 @router.get("/sessions/{session_id}/messages", response_model=list[ConversationMessageRead])
-def read_messages(session_id: int, db: Annotated[Session, Depends(get_db)]):
+def read_messages(
+    session_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+):
     session = _get_session(db, session_id)
+    ensure_family_access(user, session.family_id)
     return session.messages
 
 
@@ -29,8 +35,15 @@ def reply_to_ai(
     session_id: int,
     payload: ConversationReplyRequest,
     db: Annotated[Session, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
 ):
     session = _get_session(db, session_id)
+    ensure_family_access(user, session.family_id)
+    if session.status in {SessionStatus.completed, SessionStatus.story_created}:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Check-in session is already completed.",
+        )
     saved_message, ai_message, should_generate_story = append_parent_reply(
         db,
         session,

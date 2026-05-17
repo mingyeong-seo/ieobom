@@ -7,8 +7,8 @@ from app.models import Reaction, Story
 
 
 REACTION_PRESETS = {
-    "love": {"id": 1, "label": "잘했어요", "emoji": "❤️"},
-    "miss": {"id": 2, "label": "보고싶어요", "emoji": "😊"},
+    "love": {"id": 1, "label": "보고싶어요", "emoji": "❤️"},
+    "miss": {"id": 2, "label": "고마워요", "emoji": "😊"},
     "call": {"id": 3, "label": "전화할게요", "emoji": "📞"},
 }
 

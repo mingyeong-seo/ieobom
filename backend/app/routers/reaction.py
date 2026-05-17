@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.deps import get_current_user
+from app.deps import ensure_family_access, get_current_user
 from app.models import Reaction, Story, User
 from app.schemas import ReactionCommentRead, ReactionCreateRequest, ReactionSummaryRead
 from app.utils import REACTION_PRESETS, reaction_counts
@@ -16,8 +16,13 @@ router = APIRouter(prefix="/reactions", tags=["reaction"])
 
 
 @router.get("/stories/{story_id}", response_model=ReactionSummaryRead)
-def read_story_reactions(story_id: int, db: Annotated[Session, Depends(get_db)]):
+def read_story_reactions(
+    story_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+):
     story = _get_story(db, story_id)
+    ensure_family_access(user, story.family_id)
     return _summary(story.reactions)
 
 
@@ -29,6 +34,7 @@ def create_story_reaction(
     user: Annotated[User, Depends(get_current_user)],
 ):
     story = _get_story(db, story_id)
+    ensure_family_access(user, story.family_id)
     preset = REACTION_PRESETS[payload.type]
     db.add(
         Reaction(

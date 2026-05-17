@@ -55,3 +55,15 @@ def require_role(*roles: UserRole):
         return user
 
     return dependency
+
+
+def user_family_ids(user: User) -> set[int]:
+    return {membership.family_id for membership in user.family_memberships}
+
+
+def ensure_family_access(user: User, family_id: int) -> None:
+    if family_id not in user_family_ids(user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You cannot access this family resource.",
+        )
