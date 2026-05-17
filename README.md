@@ -55,6 +55,14 @@ npm run dev
 - Vite
 - JavaScript
 
+### Backend
+- Python
+- FastAPI
+- MySQL
+- SQLAlchemy
+- Docker
+- OpenAI API
+
 ### Design
 - Figma
 
