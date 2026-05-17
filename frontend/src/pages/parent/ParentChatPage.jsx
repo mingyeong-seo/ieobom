@@ -67,7 +67,7 @@ function normalizeRoutine(routine) {
   return {
     id: routine.id,
     title: routine.title,
-    statusText: isDone ? '?꾨즺' : '?湲?',
+    statusText: isDone ? '완료' : '대기',
     colorClass: isDone ? 'green' : 'pink',
     statusClass: isDone ? 'done' : 'pending',
   };
